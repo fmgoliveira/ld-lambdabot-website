@@ -1,0 +1,42 @@
+{
+  "short_name": "Lambda Bot",
+  "name": "Lambda Bot Website & Online Dashboard",
+  "description": "The official website for Lambda Bot and the place where you can setup the bot in your server - Online Dashboard. Made by Lambda Development Team.",
+  "icons": [
+    {
+      "src": "img/favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "img/logo32.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "img/logo24.ico",
+      "sizes": "24x24",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "img/logo16.ico",
+      "sizes": "16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "img/logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "img/logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "id": "/",
+  "display": "standalone",
+  "theme_color": "#ffa726",
+  "background_color": "#2f3136"
+}

@@ -697,7 +697,7 @@ export async function postVerificationSettings(guildId: string | undefined, data
           content: data.settings.message,
           components: [
             new MessageActionRow().addComponents(
-              new MessageButton().setLabel(data.settings.buttonLabel).setStyle('SUCCESS').setCustomId('verification-verify').setEmoji('<:check_white:962029281494589520>'),
+              new MessageButton().setLabel(data.settings.buttonLabel).setStyle('SUCCESS').setCustomId('verification-verify').setEmoji('<:verification_check:969285875219460126>'),
             ),
           ],
         }).catch((err) => { return { error: 'Could not send the verification panel message. Make sure the bot has permissions and try again.' } });
@@ -729,7 +729,7 @@ export async function postVerificationSettings(guildId: string | undefined, data
           ],
           components: [
             new MessageActionRow().addComponents(
-              new MessageButton().setLabel(data.settings.buttonLabel).setStyle('SUCCESS').setCustomId('verification-verify').setEmoji('<:check_white:962029281494589520>'),
+              new MessageButton().setLabel(data.settings.buttonLabel).setStyle('SUCCESS').setCustomId('verification-verify').setEmoji('<:verification_check:969285875219460126>'),
             ),
           ],
         }).catch((err) => { return { error: 'Could not send the verification panel message. Make sure the bot has permissions and try again.' } });

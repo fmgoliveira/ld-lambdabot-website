@@ -444,7 +444,7 @@ async function postVerificationSettings(guildId, data) {
                     channel.send({
                         content: data.settings.message,
                         components: [
-                            new discord_js_3.MessageActionRow().addComponents(new discord_js_2.MessageButton().setLabel(data.settings.buttonLabel).setStyle('SUCCESS').setCustomId('verification-verify').setEmoji('<:check_white:962029281494589520>')),
+                            new discord_js_3.MessageActionRow().addComponents(new discord_js_2.MessageButton().setLabel(data.settings.buttonLabel).setStyle('SUCCESS').setCustomId('verification-verify').setEmoji('<:verification_check:969285875219460126>')),
                         ],
                     }).catch((err) => { return { error: 'Could not send the verification panel message. Make sure the bot has permissions and try again.' }; });
             }
@@ -476,7 +476,7 @@ async function postVerificationSettings(guildId, data) {
                             },
                         ],
                         components: [
-                            new discord_js_3.MessageActionRow().addComponents(new discord_js_2.MessageButton().setLabel(data.settings.buttonLabel).setStyle('SUCCESS').setCustomId('verification-verify').setEmoji('<:check_white:962029281494589520>')),
+                            new discord_js_3.MessageActionRow().addComponents(new discord_js_2.MessageButton().setLabel(data.settings.buttonLabel).setStyle('SUCCESS').setCustomId('verification-verify').setEmoji('<:verification_check:969285875219460126>')),
                         ],
                     }).catch((err) => { return { error: 'Could not send the verification panel message. Make sure the bot has permissions and try again.' }; });
             }

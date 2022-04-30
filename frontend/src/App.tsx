@@ -52,22 +52,22 @@ function App() {
           <Route path="/terms" element={< Terms />} />
           <Route path="/policy" element={< Policy />} />
 
-          <Route path="/login" element={user ? <RedirectToServers /> : !error ? <Login /> : <InternalServerErrorPage />} />
-          <Route path="/logout" element={user ? <RedirectToIndex /> : !error ? <Logout /> : <InternalServerErrorPage />} />
-          <Route path="/servers" element={user ? <ServersPage user={user} /> : !error ? <ForbiddenPage /> : <InternalServerErrorPage />} />
-          <Route path="/dashboard" element={user ? <DashboardPage user={user} /> : !error ? <ForbiddenPage /> : <InternalServerErrorPage />} />
+          <Route path="/login" element={user ? <RedirectToServers /> : <Login />} />
+          <Route path="/logout" element={user ? <RedirectToIndex /> : <Logout />} />
+          <Route path="/servers" element={user ? <ServersPage user={user} /> : <ForbiddenPage />} />
+          <Route path="/dashboard" element={user ? <DashboardPage user={user} /> : <ForbiddenPage />} />
 
-          <Route path="/insights/dashboard" element={user ? <InsightsDashboardPage user={user} /> : !error ? <ForbiddenPage /> : <InternalServerErrorPage />} />
-          <Route path="/insights/members" element={user ? <InsightsMembersPage user={user} /> : !error ? <ForbiddenPage /> : <InternalServerErrorPage />} />
-          <Route path="/insights/logs" element={user ? <InsightsActionsPage user={user} /> : !error ? <ForbiddenPage /> : <InternalServerErrorPage />} />
+          <Route path="/insights/dashboard" element={user ? <InsightsDashboardPage user={user} /> : <ForbiddenPage />} />
+          <Route path="/insights/members" element={user ? <InsightsMembersPage user={user} /> : <ForbiddenPage />} />
+          <Route path="/insights/logs" element={user ? <InsightsActionsPage user={user} /> : <ForbiddenPage />} />
 
-          <Route path="/manage/settings" element={user ? <ManageAdministrationPage user={user} /> : !error ? <ForbiddenPage /> : <InternalServerErrorPage />} />
-          <Route path="/manage/welcome" element={user ? <ManageWelcomePage user={user} /> : !error ? <ForbiddenPage /> : <InternalServerErrorPage />} />
-          <Route path="/manage/tickets" element={user ? <ManageTicketsPage user={user} /> : !error ? <ForbiddenPage /> : <InternalServerErrorPage />} />
-          <Route path="/manage/moderation" element={user ? <ManageModerationPage user={user} /> : !error ? <ForbiddenPage /> : <InternalServerErrorPage />} />
-          <Route path="/manage/logging" element={user ? <ManageLoggingPage user={user} /> : !error ? <ForbiddenPage /> : <InternalServerErrorPage />} />
-          <Route path="/manage/verification" element={user ? <ManageVerificationPage user={user} /> : !error ? <ForbiddenPage /> : <InternalServerErrorPage />} />
-          <Route path="/manage/levels" element={user ? <ManageLevelsPage user={user} /> : !error ? <ForbiddenPage /> : <InternalServerErrorPage />} />
+          <Route path="/manage/settings" element={user ? <ManageAdministrationPage user={user} /> : <ForbiddenPage />} />
+          <Route path="/manage/welcome" element={user ? <ManageWelcomePage user={user} /> : <ForbiddenPage />} />
+          <Route path="/manage/tickets" element={user ? <ManageTicketsPage user={user} /> : <ForbiddenPage />} />
+          <Route path="/manage/moderation" element={user ? <ManageModerationPage user={user} /> : <ForbiddenPage />} />
+          <Route path="/manage/logging" element={user ? <ManageLoggingPage user={user} /> : <ForbiddenPage />} />
+          <Route path="/manage/verification" element={user ? <ManageVerificationPage user={user} /> : <ForbiddenPage />} />
+          <Route path="/manage/levels" element={user ? <ManageLevelsPage user={user} /> : <ForbiddenPage />} />
 
           <Route path="/401" element={<ForbiddenPage />} />
           <Route path="/404" element={<NotFoundPage user={user} />} />

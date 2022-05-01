@@ -296,9 +296,9 @@ async function postTicketsSettings(guildId, data) {
                 const prevChannel = client_1.client.channels.cache.get(prevData.panelMessage.channel);
                 if (prevChannel && (prevChannel.type === 'GUILD_NEWS' || prevChannel.type === 'GUILD_TEXT')) {
                     if (prevData.panelMessage.id) {
-                        const oldMessage = await prevChannel.messages.fetch(prevData.panelMessage.id);
+                        const oldMessage = await prevChannel.messages.fetch(prevData.panelMessage.id).catch(() => { });
                         if (oldMessage)
-                            oldMessage.deletable ? oldMessage.delete().catch((err) => console.log(err)) : null;
+                            oldMessage.deletable ? oldMessage.delete().catch(() => { }) : null;
                     }
                     ;
                 }

@@ -9,7 +9,7 @@ process.on('uncaughtException', (err) => {
     webhook.send({
         embeds: [
             new discord_js_1.MessageEmbed()
-                .setAuthor({ name: 'Lambda Bot Website|API Process' })
+                .setAuthor({ name: 'Lambda Bot | Website & API Process' })
                 .setColor('#2f3136')
                 .setTimestamp()
                 .setTitle('**[ERROR]** Uncaught Exception')
@@ -22,7 +22,7 @@ process.on('unhandledRejection', (err, promise) => {
     webhook.send({
         embeds: [
             new discord_js_1.MessageEmbed()
-                .setAuthor({ name: 'Lambda Bot Website|API Process' })
+                .setAuthor({ name: 'Lambda Bot | Website & API Process' })
                 .setColor('#2f3136')
                 .setTimestamp()
                 .setTitle('**[ERROR]** Unhandled Rejection')

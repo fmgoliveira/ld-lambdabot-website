@@ -37,7 +37,7 @@ export const ManageTicketsPage = ({ user }: { user: User }) => {
   const [ticketsPanelMessageThumbnail, setTicketsPanelMessageThumbnail] = useState()
   const [ticketsPanelMessageImage, setTicketsPanelMessageImage] = useState()
   const [ticketsPanelMessageTimestamp, setTicketsPanelMessageTimestamp] = useState()
-  const [ticketsPanelExists, setTicketsPanelExists] = useState<boolean | undefined>()
+  const [ticketsPanelExists, setTicketsPanelExists] = useState<boolean | undefined>(data?.settings.panelMessage.id ? true : false)
 
   const [addCommand, setAddCommand] = useState()
   const [removeCommand, setRemoveCommand] = useState()
@@ -502,18 +502,11 @@ export const ManageTicketsPage = ({ user }: { user: User }) => {
                 <div className="row">
                   <div className="col-12">
                     {
-                      ticketsPanelExists !== undefined ?
-                        ticketsPanelExists ?
-                          <div className="d-flex gap-2 align-items-center">
-                            <button className="btn btn-success btn-sm mt-4" onClick={handleSavePanelMessage}>Update Panel</button>
-                            <button className="btn btn-danger btn-sm mt-4" onClick={handleDeletePanelMessage}>Delete Panel</button>
-                          </div> :
-                          data.settings.panelMessage.id ?
-                            <div className="d-flex gap-2 align-items-center">
-                              <button className="btn btn-success btn-sm mt-4" onClick={handleSavePanelMessage}>Update Panel</button>
-                              <button className="btn btn-danger btn-sm mt-4" onClick={handleDeletePanelMessage}>Delete Panel</button>
-                            </div> :
-                            <button className="btn btn-primary btn-sm mt-4" onClick={handleSavePanelMessage}>Send Panel</button> :
+                      ticketsPanelExists ?
+                        <div className="d-flex gap-2 align-items-center">
+                          <button className="btn btn-success btn-sm mt-4" onClick={handleSavePanelMessage}>Update Panel</button>
+                          <button className="btn btn-danger btn-sm mt-4" onClick={handleDeletePanelMessage}>Delete Panel</button>
+                        </div> :
                         <button className="btn btn-primary btn-sm mt-4" onClick={handleSavePanelMessage}>Send Panel</button>
                     }
                   </div>

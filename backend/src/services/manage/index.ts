@@ -381,6 +381,7 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
 
         await TicketCategory.deleteMany({ guildId });
 
+        let count: number = 0;
         data.settings.categories.forEach(async (category) => {
           await TicketCategory.create({
             guildId,
@@ -395,12 +396,12 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
             deleteOnClose: category.deleteOnClose,
             moveToClosedCategory: category.moveToClosedCategory,
           });
+          count++;
         });
 
-        const currentTicketCategories = await TicketCategory.find({ guildId });
 
         let components: null | MessageActionRow = null;
-        if (currentTicketCategories.length > 0) {
+        if (count > 0) {
           components = new MessageActionRow().addComponents(
             new MessageSelectMenu()
               .setCustomId('ticket-create')

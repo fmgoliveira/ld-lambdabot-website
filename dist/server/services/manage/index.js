@@ -271,6 +271,7 @@ async function postTicketsSettings(guildId, data) {
                 if (data.settings.panelMessage.message.timestamp)
                     embed.setTimestamp();
                 await schemas_1.TicketCategory.deleteMany({ guildId });
+                let count = 0;
                 data.settings.categories.forEach(async (category) => {
                     await schemas_1.TicketCategory.create({
                         guildId,
@@ -285,10 +286,10 @@ async function postTicketsSettings(guildId, data) {
                         deleteOnClose: category.deleteOnClose,
                         moveToClosedCategory: category.moveToClosedCategory,
                     });
+                    count++;
                 });
-                const currentTicketCategories = await schemas_1.TicketCategory.find({ guildId });
                 let components = null;
-                if (currentTicketCategories.length > 0) {
+                if (count > 0) {
                     components = new discord_js_3.MessageActionRow().addComponents(new discord_js_1.MessageSelectMenu()
                         .setCustomId('ticket-create')
                         .setPlaceholder('Select a Ticket Category')

@@ -220,7 +220,51 @@ export async function getTicketsSettings(guildId: string | undefined) {
   const guild = await Guild.findOne({ guildId });
   if (!guild) return null;
 
-  const settings = guild.modules.tickets;
+  const settings: {
+    enabled: boolean;
+    panelMessage: {
+      id?: string;
+      url?: string;
+      message: {
+        title: string;
+        description: string;
+        color: string;
+        thumbnail: string;
+        titleUrl: string;
+        image: string;
+        timestamp: boolean;
+      };
+      channel: string;
+    };
+    logChannel: string;
+    closedCategory: string;
+    ticketCount: number;
+    categories?: {
+      categoryChannel: string;
+      label: string;
+      maxTickets: number;
+      supportRoles: string[];
+      welcomeMessage: {
+        message: string;
+        color: string;
+      };
+      deleteOnClose: boolean;
+      moveToClosedCategory: boolean;
+    }[];
+  } = guild.modules.tickets;
+
+  const ticketCategories = (await TicketCategory.find({ guildId })).map((c) => ({
+    categoryChannel: c.categoryChannel,
+    label: c.label,
+    maxTickets: c.maxTickets,
+    supportRoles: c.supportRoles,
+    welcomeMessage: c.welcomeMessage,
+    deleteOnClose: c.deleteOnClose,
+    moveToClosedCategory: c.moveToClosedCategory,
+  }));
+
+  settings.categories = ticketCategories;
+
   const commands = guild.commands.tickets;
 
   return { settings, commands };

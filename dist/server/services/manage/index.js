@@ -149,6 +149,16 @@ async function getTicketsSettings(guildId) {
     if (!guild)
         return null;
     const settings = guild.modules.tickets;
+    const ticketCategories = (await schemas_1.TicketCategory.find({ guildId })).map((c) => ({
+        categoryChannel: c.categoryChannel,
+        label: c.label,
+        maxTickets: c.maxTickets,
+        supportRoles: c.supportRoles,
+        welcomeMessage: c.welcomeMessage,
+        deleteOnClose: c.deleteOnClose,
+        moveToClosedCategory: c.moveToClosedCategory,
+    }));
+    settings.categories = ticketCategories;
     const commands = guild.commands.tickets;
     return { settings, commands };
 }

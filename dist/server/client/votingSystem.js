@@ -151,7 +151,7 @@ exports.default = async (client) => {
             ;
         });
     };
-    const webhook = (await client.guilds.cache.get(process.env.LAMBDA_GUILD_ID).fetchWebhooks()).get("936677792702140416");
+    const webhook = (await client.guilds.cache.get('878935240377241701').fetchWebhooks()).get("936677792702140416");
     const updateVotedMessage = ((votedMembers) => {
         const embeds = [];
         const votedArray = [];

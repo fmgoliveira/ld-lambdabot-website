@@ -16,12 +16,12 @@ declare global {
       DISCORD_LABS_TOKEN: string;
       BOTSFORDISCORD_TOKEN: string;
       TOP_GG_TOKEN: string;
+      INFINITY_BOTS_TOKEN: string;
+      DISCORD_LABS_WEBHOOK_TOKEN: string;
       BOTSFORDISCORD_WEBHOOK_TOKEN: string;
       TOP_GG_WEBHOOK_TOKEN: string;
-      VOTED1_ROLE: string;
-      VOTED2_ROLE: string;
-      VOTED3_ROLE: string;
-      VOTED4_ROLE: string;
+      INFINITY_BOTS_WEBHOOK_TOKEN: string;
+      VOTED_ROLE: string;
     }
 }
 }

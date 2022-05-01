@@ -419,16 +419,16 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
           };
         };
 
-        if (!data.settings!.panelMessage.id) data.settings!.panelMessage.id = guild.modules.tickets.panelMessage.id;
-        if (!data.settings!.panelMessage.url) data.settings!.panelMessage.url = guild.modules.tickets.panelMessage.url;
+        if (!data.settings.panelMessage.id) data.settings.panelMessage.id = guild.modules.tickets.panelMessage.id;
+        if (!data.settings.panelMessage.url) data.settings.panelMessage.url = guild.modules.tickets.panelMessage.url;
 
         try {
           const message = await channel.send({
             embeds: [embed],
             components: [components],
           });
-          data.settings!.panelMessage.id = message.id;
-          data.settings!.panelMessage.url = message.url;
+          data.settings.panelMessage.id = message.id;
+          data.settings.panelMessage.url = message.url;
         } catch (err) {
           console.log(err)
           return { error: "There was an error sending the panel message. Please make sure the bot has permissions and try again." };

@@ -271,7 +271,6 @@ async function postTicketsSettings(guildId, data) {
                 if (data.settings.panelMessage.message.timestamp)
                     embed.setTimestamp();
                 await schemas_1.TicketCategory.deleteMany({ guildId });
-                let count = 0;
                 data.settings.categories.forEach(async (category) => {
                     await schemas_1.TicketCategory.create({
                         guildId,
@@ -286,16 +285,11 @@ async function postTicketsSettings(guildId, data) {
                         deleteOnClose: category.deleteOnClose,
                         moveToClosedCategory: category.moveToClosedCategory,
                     });
-                    count++;
                 });
-                let components = null;
-                if (count > 0) {
-                    components = new discord_js_3.MessageActionRow().addComponents(new discord_js_1.MessageSelectMenu()
-                        .setCustomId('ticket-create')
-                        .setPlaceholder('Select a Ticket Category')
-                        .addOptions((await schemas_1.TicketCategory.find({ guildId })).map((category) => ({ label: category.label, value: String(category._id) }))));
-                }
-                ;
+                const components = new discord_js_3.MessageActionRow().addComponents(new discord_js_1.MessageSelectMenu()
+                    .setCustomId('ticket-create')
+                    .setPlaceholder('Select a Ticket Category')
+                    .addOptions((await schemas_1.TicketCategory.find({ guildId })).map((category) => ({ label: category.label, value: String(category._id) }))));
                 const prevChannel = client_1.client.channels.cache.get(prevData.panelMessage.channel);
                 if (prevChannel && (prevChannel.type === 'GUILD_NEWS' || prevChannel.type === 'GUILD_TEXT')) {
                     if (prevData.panelMessage.id) {
@@ -313,7 +307,7 @@ async function postTicketsSettings(guildId, data) {
                 try {
                     const message = await channel.send({
                         embeds: [embed],
-                        components: components ? [components] : undefined,
+                        components: [components],
                     });
                     data.settings.panelMessage.id = message.id;
                     data.settings.panelMessage.url = message.url;

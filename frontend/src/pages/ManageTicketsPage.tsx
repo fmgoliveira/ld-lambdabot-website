@@ -37,7 +37,7 @@ export const ManageTicketsPage = ({ user }: { user: User }) => {
   const [ticketsPanelMessageThumbnail, setTicketsPanelMessageThumbnail] = useState()
   const [ticketsPanelMessageImage, setTicketsPanelMessageImage] = useState()
   const [ticketsPanelMessageTimestamp, setTicketsPanelMessageTimestamp] = useState()
-  const [ticketsPanelExists, setTicketsPanelExists] = useState<boolean | undefined>()
+  const [ticketsPanelExists, setTicketsPanelExists] = useState<boolean | undefined>(data?.settings.panelMessage.id ? true : false)
 
   const [addCommand, setAddCommand] = useState()
   const [removeCommand, setRemoveCommand] = useState()

@@ -186,8 +186,8 @@ async function postTicketsSettings(guildId, data) {
             id: "",
             url: "",
             message: {
-                title: "",
-                description: "",
+                title: "Open a Ticket",
+                description: "Choose the corresponding category below to open a support ticket between you and the Support Team of {guild}.",
                 color: "#000000",
                 thumbnail: "",
                 titleUrl: "",
@@ -287,7 +287,9 @@ async function postTicketsSettings(guildId, data) {
                     });
                 });
                 let components = null;
+                console.log((await schemas_1.TicketCategory.find({ guildId })).length || 'UNDEFINED');
                 if ((await schemas_1.TicketCategory.find({ guildId })).length > 0) {
+                    console.log('Creating components');
                     components = new discord_js_3.MessageActionRow().addComponents(new discord_js_1.MessageSelectMenu()
                         .setCustomId('ticket-create')
                         .setPlaceholder('Select a Ticket Category')

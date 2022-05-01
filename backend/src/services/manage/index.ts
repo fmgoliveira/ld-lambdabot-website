@@ -305,8 +305,8 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
       id: "",
       url: "",
       message: {
-        title: "",
-        description: "",
+        title: "Open a Ticket",
+        description: "Choose the corresponding category below to open a support ticket between you and the Support Team of {guild}.",
         color: "#000000",
         thumbnail: "",
         titleUrl: "",
@@ -398,7 +398,9 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
         });
 
         let components: null | MessageActionRow = null;
+        console.log((await TicketCategory.find({ guildId })).length || 'UNDEFINED');
         if ((await TicketCategory.find({ guildId })).length > 0) {
+          console.log('Creating components');
           components = new MessageActionRow().addComponents(
             new MessageSelectMenu()
               .setCustomId('ticket-create')

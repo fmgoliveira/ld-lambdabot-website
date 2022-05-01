@@ -237,7 +237,7 @@ async function postTicketsSettings(guildId, data) {
             deleteOnClose: c.deleteOnClose,
             moveToClosedCategory: c.moveToClosedCategory,
         }));
-        if (data.updatePanelMessage || data.settings.categories !== prevTicketCategories) {
+        if (data.settings.categories !== prevTicketCategories) {
             data.settings.categories.forEach((category) => {
                 const botHasPermissionsInCategoryChannel = (0, methods_1.checkForBotPermissionInCategory)(category.categoryChannel, "MANAGE_CHANNELS");
                 if (botHasPermissionsInCategoryChannel === 0)
@@ -253,6 +253,28 @@ async function postTicketsSettings(guildId, data) {
                 if (category.label.length < 1)
                     return { error: "The label you specified is too short." };
             });
+            const dataToDelete = await schemas_1.TicketCategory.find({ guildId });
+            dataToDelete.forEach(async (c) => {
+                await c.delete();
+            });
+            data.settings.categories.forEach(async (category) => {
+                const newTicketCategory = new schemas_1.TicketCategory({
+                    guildId,
+                    categoryChannel: category.categoryChannel,
+                    label: category.label,
+                    maxTickets: category.maxTickets,
+                    supportRoles: category.supportRoles,
+                    welcomeMessage: {
+                        message: category.welcomeMessage.message,
+                        color: category.welcomeMessage.color,
+                    },
+                    deleteOnClose: category.deleteOnClose,
+                    moveToClosedCategory: category.moveToClosedCategory,
+                });
+                await newTicketCategory.save();
+            });
+        }
+        if (data.updatePanelMessage || data.settings.categories !== prevTicketCategories) {
             const prevData = guild.modules.tickets;
             const channel = client_1.client.channels.cache.get(data.settings.panelMessage.channel);
             if (channel && (channel.type === 'GUILD_NEWS' || channel.type === 'GUILD_TEXT')) {
@@ -270,59 +292,37 @@ async function postTicketsSettings(guildId, data) {
                     embed.setImage(data.settings.panelMessage.message.image);
                 if (data.settings.panelMessage.message.timestamp)
                     embed.setTimestamp();
-                const dataToDelete = await schemas_1.TicketCategory.find({ guildId });
-                dataToDelete.forEach(async (c) => {
-                    await c.delete();
-                });
-                data.settings.categories.forEach(async (category) => {
-                    const newTicketCategory = new schemas_1.TicketCategory({
-                        guildId,
-                        categoryChannel: category.categoryChannel,
-                        label: category.label,
-                        maxTickets: category.maxTickets,
-                        supportRoles: category.supportRoles,
-                        welcomeMessage: {
-                            message: category.welcomeMessage.message,
-                            color: category.welcomeMessage.color,
-                        },
-                        deleteOnClose: category.deleteOnClose,
-                        moveToClosedCategory: category.moveToClosedCategory,
+                const components = new discord_js_3.MessageActionRow().addComponents(new discord_js_1.MessageSelectMenu()
+                    .setCustomId('ticket-create')
+                    .setPlaceholder('Select a Ticket Category')
+                    .addOptions((await schemas_1.TicketCategory.find({ guildId })).map((category) => ({ label: category.label, value: String(category._id) }))));
+                const prevChannel = client_1.client.channels.cache.get(prevData.panelMessage.channel);
+                if (prevChannel && (prevChannel.type === 'GUILD_NEWS' || prevChannel.type === 'GUILD_TEXT')) {
+                    if (prevData.panelMessage.id) {
+                        const oldMessage = await prevChannel.messages.fetch(prevData.panelMessage.id).catch((err) => console.log(err));
+                        if (oldMessage)
+                            oldMessage.deletable ? oldMessage.delete().catch((err) => console.log(err)) : null;
+                    }
+                    ;
+                }
+                ;
+                if (!data.settings.panelMessage.id)
+                    data.settings.panelMessage.id = guild.modules.tickets.panelMessage.id;
+                if (!data.settings.panelMessage.url)
+                    data.settings.panelMessage.url = guild.modules.tickets.panelMessage.url;
+                try {
+                    const message = await channel.send({
+                        embeds: [embed],
+                        components: [components],
                     });
-                    await newTicketCategory.save();
-                });
-                setTimeout(async () => {
-                    const components = new discord_js_3.MessageActionRow().addComponents(new discord_js_1.MessageSelectMenu()
-                        .setCustomId('ticket-create')
-                        .setPlaceholder('Select a Ticket Category')
-                        .addOptions((await schemas_1.TicketCategory.find({ guildId })).map((category) => ({ label: category.label, value: String(category._id) }))));
-                    const prevChannel = client_1.client.channels.cache.get(prevData.panelMessage.channel);
-                    if (prevChannel && (prevChannel.type === 'GUILD_NEWS' || prevChannel.type === 'GUILD_TEXT')) {
-                        if (prevData.panelMessage.id) {
-                            const oldMessage = await prevChannel.messages.fetch(prevData.panelMessage.id).catch(() => { });
-                            if (oldMessage)
-                                oldMessage.deletable ? oldMessage.delete().catch(() => { }) : null;
-                        }
-                        ;
-                    }
-                    ;
-                    if (!data.settings.panelMessage.id)
-                        data.settings.panelMessage.id = guild.modules.tickets.panelMessage.id;
-                    if (!data.settings.panelMessage.url)
-                        data.settings.panelMessage.url = guild.modules.tickets.panelMessage.url;
-                    try {
-                        const message = await channel.send({
-                            embeds: [embed],
-                            components: [components],
-                        });
-                        data.settings.panelMessage.id = message.id;
-                        data.settings.panelMessage.url = message.url;
-                    }
-                    catch (err) {
-                        console.log(err);
-                        return { error: "There was an error sending the panel message. Please make sure the bot has permissions and try again." };
-                    }
-                    ;
-                }, 5000);
+                    data.settings.panelMessage.id = message.id;
+                    data.settings.panelMessage.url = message.url;
+                }
+                catch (err) {
+                    console.log(err);
+                    return { error: "There was an error sending the panel message. Please make sure the bot has permissions and try again." };
+                }
+                ;
             }
             else
                 return { error: "The panel message channel you specified is not valid." };

@@ -379,7 +379,10 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
         if (data.settings.panelMessage.message.image) embed.setImage(data.settings.panelMessage.message.image);
         if (data.settings.panelMessage.message.timestamp) embed.setTimestamp();
 
-        await TicketCategory.deleteMany({ guildId });
+        const dataToDelete = await TicketCategory.find({ guildId });
+        dataToDelete.forEach(async (c) => {
+          await c.delete();
+        });
 
         data.settings.categories.forEach(async (category) => {
           await TicketCategory.create({

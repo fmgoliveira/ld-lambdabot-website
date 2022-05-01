@@ -270,7 +270,10 @@ async function postTicketsSettings(guildId, data) {
                     embed.setImage(data.settings.panelMessage.message.image);
                 if (data.settings.panelMessage.message.timestamp)
                     embed.setTimestamp();
-                await schemas_1.TicketCategory.deleteMany({ guildId });
+                const dataToDelete = await schemas_1.TicketCategory.find({ guildId });
+                dataToDelete.forEach(async (c) => {
+                    await c.delete();
+                });
                 data.settings.categories.forEach(async (category) => {
                     await schemas_1.TicketCategory.create({
                         guildId,

@@ -286,8 +286,9 @@ async function postTicketsSettings(guildId, data) {
                         moveToClosedCategory: category.moveToClosedCategory,
                     });
                 });
+                const currentTicketCategories = await schemas_1.TicketCategory.find({ guildId });
                 let components = null;
-                if ((await schemas_1.TicketCategory.find({ guildId })).length > 0) {
+                if (currentTicketCategories.length > 0) {
                     components = new discord_js_3.MessageActionRow().addComponents(new discord_js_1.MessageSelectMenu()
                         .setCustomId('ticket-create')
                         .setPlaceholder('Select a Ticket Category')

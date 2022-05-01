@@ -242,6 +242,7 @@ export async function getTicketsSettings(guildId: string | undefined) {
 
 export async function postTicketsSettings(guildId: string | undefined, data: {
   deletePanelMessage?: boolean;
+  updatePanelMessage?: boolean;
   settings?: {
     enabled: boolean;
     panelMessage: {
@@ -336,20 +337,34 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
     if (data.settings.categories.length === 0) return { error: "You must specify at least one category." };
     if (data.settings.categories.length > 15) return { error: "You can only have a maximum of 15 categories." };
 
-    data.settings.categories.forEach((category) => {
-      const botHasPermissionsInCategoryChannel: 0 | 1 | 2 = checkForBotPermissionInCategory(category.categoryChannel, "MANAGE_CHANNELS");
-      if (botHasPermissionsInCategoryChannel === 0) return { error: "The category channel you specified is not valid." };
-      if (botHasPermissionsInCategoryChannel === 1) return { error: "The bot does not have permission to manage channels in the category channel you specified." };
+    const prevTicketCategories = (await TicketCategory.find({ guildId })).map((c) => ({
+      categoryChannel: c.categoryChannel,
+      label: c.label,
+      maxTickets: c.maxTickets,
+      supportRoles: c.supportRoles,
+      welcomeMessage: {
+        message: c.welcomeMessage.message,
+        color: c.welcomeMessage.color,
+      },
+      deleteOnClose: c.deleteOnClose,
+      moveToClosedCategory: c.moveToClosedCategory,
+    }));
 
-      if (category.welcomeMessage.message.length > 4096) return { error: "The welcome message you specified is too long." };
-      if (category.welcomeMessage.message.length < 1) return { error: "The welcome message you specified is too short." };
+    if (data.updatePanelMessage || data.settings.categories !== prevTicketCategories) {
+      data.settings.categories.forEach((category) => {
+        const botHasPermissionsInCategoryChannel: 0 | 1 | 2 = checkForBotPermissionInCategory(category.categoryChannel, "MANAGE_CHANNELS");
+        if (botHasPermissionsInCategoryChannel === 0) return { error: "The category channel you specified is not valid." };
+        if (botHasPermissionsInCategoryChannel === 1) return { error: "The bot does not have permission to manage channels in the category channel you specified." };
 
-      if (category.label.length > 80) return { error: "The label you specified is too long. It can have a maximum of 80 characters." };
-      if (category.label.length < 1) return { error: "The label you specified is too short." };
-    });
+        if (category.welcomeMessage.message.length > 4096) return { error: "The welcome message you specified is too long." };
+        if (category.welcomeMessage.message.length < 1) return { error: "The welcome message you specified is too short." };
 
-    const prevData = guild.modules.tickets;
-    if (prevData.panelMessage.message !== data.settings.panelMessage.message) {
+        if (category.label.length > 80) return { error: "The label you specified is too long. It can have a maximum of 80 characters." };
+        if (category.label.length < 1) return { error: "The label you specified is too short." };
+      });
+
+      const prevData = guild.modules.tickets;
+
       const channel = client.channels.cache.get(data.settings.panelMessage.channel);
       if (channel && (channel.type === 'GUILD_NEWS' || channel.type === 'GUILD_TEXT')) {
         const embed = new MessageEmbed()
@@ -357,16 +372,30 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
           .setDescription(placeholderReplace(data.settings.panelMessage.message.description, { name: guild.guildName, id: guild.guildId }))
           .setColor(parseInt(data.settings.panelMessage.message.color.replace('#', ''), 16));
 
+        if (!data.settings.panelMessage.message.description) return { error: "The panel message description cannot be empty." };
+
         if (data.settings.panelMessage.message.thumbnail) embed.setThumbnail(data.settings.panelMessage.message.thumbnail);
         if (data.settings.panelMessage.message.titleUrl) embed.setURL(data.settings.panelMessage.message.titleUrl);
         if (data.settings.panelMessage.message.image) embed.setImage(data.settings.panelMessage.message.image);
         if (data.settings.panelMessage.message.timestamp) embed.setTimestamp();
 
         const ticketCategories = await TicketCategory.find({ guildId });
-        ticketCategories.forEach(async (category) => await TicketCategory.deleteOne({ _id: category._id }));
 
         data.settings.categories.forEach(async (category) => {
-          const newCategory = new TicketCategory({
+          if (ticketCategories.some((c) => ({
+            categoryChannel: c.categoryChannel,
+            label: c.label,
+            maxTickets: c.maxTickets,
+            supportRoles: c.supportRoles,
+            welcomeMessage: {
+              message: c.welcomeMessage.message,
+              color: c.welcomeMessage.color,
+            },
+            deleteOnClose: c.deleteOnClose,
+            moveToClosedCategory: c.moveToClosedCategory,
+          }) === category)) return;
+
+          await TicketCategory.create({
             guildId,
             categoryChannel: category.categoryChannel,
             label: category.label,
@@ -378,13 +407,11 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
             },
             deleteOnClose: category.deleteOnClose,
             moveToClosedCategory: category.moveToClosedCategory,
-          })
-
-          await newCategory.save()
+          });
         });
 
         let components: null | MessageActionRow = null;
-        if (data.settings.categories.length > 0) {
+        if ((await TicketCategory.find({ guildId })).length > 0) {
           components = new MessageActionRow().addComponents(
             new MessageSelectMenu()
               .setCustomId('ticket-create')
@@ -401,7 +428,8 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
           };
         };
 
-        if (!data.settings.panelMessage.message.description) return { error: "The panel message description cannot be empty." };
+        if (!data.settings.panelMessage.id) data.settings.panelMessage.id = guild.modules.tickets.panelMessage.id;
+        if (!data.settings.panelMessage.url) data.settings.panelMessage.url = guild.modules.tickets.panelMessage.url;
 
         try {
           const message = await channel.send({
@@ -414,40 +442,36 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
           console.log(err)
           return { error: "There was an error sending the panel message. Please make sure the bot has permissions and try again." };
         };
-      };
-    };
-  }
+      } else return { error: "The panel message channel you specified is not valid." };
+    }
 
-  if (!data.settings.panelMessage.id) data.settings.panelMessage.id = guild.modules.tickets.panelMessage.id;
-  if (!data.settings.panelMessage.url) data.settings.panelMessage.url = guild.modules.tickets.panelMessage.url;
-
-  guild.modules.tickets = data.settings as {
-    enabled: boolean;
-    panelMessage: {
-      id: string;
-      url: string;
-      message: {
-        title: string;
-        description: string;
-        color: string;
-        thumbnail: string;
-        titleUrl: string;
-        image: string;
-        timestamp: boolean;
+    guild.modules.tickets = data.settings as {
+      enabled: boolean;
+      panelMessage: {
+        id: string;
+        url: string;
+        message: {
+          title: string;
+          description: string;
+          color: string;
+          thumbnail: string;
+          titleUrl: string;
+          image: string;
+          timestamp: boolean;
+        };
+        channel: string;
       };
-      channel: string;
+      logChannel: string;
+      closedCategory: string;
+      ticketCount: number;
     };
-    logChannel: string;
-    closedCategory: string;
-    ticketCount: number;
+    guild.commands.tickets = data.commands;
+
+    await guild.save();
+
+    return { guild, error: null };
   };
-  guild.commands.tickets = data.commands;
-
-  await guild.save();
-
-  return { guild, error: null };
-}
-
+};
 
 export async function getModerationSettings(guildId: string | undefined) {
   const guild = await Guild.findOne({ guildId });

@@ -321,7 +321,7 @@ export const ManageTicketsPage = ({ user }: { user: User }) => {
       }
     })
 
-    postModuleSettings(guildId, 'tickets', data, Store)
+    postModuleSettings(guildId, 'tickets', { updatePanelMessage: true, ...data }, Store)
     setTicketsPanelExists(true)
   }
 

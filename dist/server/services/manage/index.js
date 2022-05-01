@@ -225,29 +225,43 @@ async function postTicketsSettings(guildId, data) {
             return { error: "You must specify at least one category." };
         if (data.settings.categories.length > 15)
             return { error: "You can only have a maximum of 15 categories." };
-        data.settings.categories.forEach((category) => {
-            const botHasPermissionsInCategoryChannel = (0, methods_1.checkForBotPermissionInCategory)(category.categoryChannel, "MANAGE_CHANNELS");
-            if (botHasPermissionsInCategoryChannel === 0)
-                return { error: "The category channel you specified is not valid." };
-            if (botHasPermissionsInCategoryChannel === 1)
-                return { error: "The bot does not have permission to manage channels in the category channel you specified." };
-            if (category.welcomeMessage.message.length > 4096)
-                return { error: "The welcome message you specified is too long." };
-            if (category.welcomeMessage.message.length < 1)
-                return { error: "The welcome message you specified is too short." };
-            if (category.label.length > 80)
-                return { error: "The label you specified is too long. It can have a maximum of 80 characters." };
-            if (category.label.length < 1)
-                return { error: "The label you specified is too short." };
-        });
-        const prevData = guild.modules.tickets;
-        if (prevData.panelMessage.message !== data.settings.panelMessage.message) {
+        const prevTicketCategories = (await schemas_1.TicketCategory.find({ guildId })).map((c) => ({
+            categoryChannel: c.categoryChannel,
+            label: c.label,
+            maxTickets: c.maxTickets,
+            supportRoles: c.supportRoles,
+            welcomeMessage: {
+                message: c.welcomeMessage.message,
+                color: c.welcomeMessage.color,
+            },
+            deleteOnClose: c.deleteOnClose,
+            moveToClosedCategory: c.moveToClosedCategory,
+        }));
+        if (data.updatePanelMessage || data.settings.categories !== prevTicketCategories) {
+            data.settings.categories.forEach((category) => {
+                const botHasPermissionsInCategoryChannel = (0, methods_1.checkForBotPermissionInCategory)(category.categoryChannel, "MANAGE_CHANNELS");
+                if (botHasPermissionsInCategoryChannel === 0)
+                    return { error: "The category channel you specified is not valid." };
+                if (botHasPermissionsInCategoryChannel === 1)
+                    return { error: "The bot does not have permission to manage channels in the category channel you specified." };
+                if (category.welcomeMessage.message.length > 4096)
+                    return { error: "The welcome message you specified is too long." };
+                if (category.welcomeMessage.message.length < 1)
+                    return { error: "The welcome message you specified is too short." };
+                if (category.label.length > 80)
+                    return { error: "The label you specified is too long. It can have a maximum of 80 characters." };
+                if (category.label.length < 1)
+                    return { error: "The label you specified is too short." };
+            });
+            const prevData = guild.modules.tickets;
             const channel = client_1.client.channels.cache.get(data.settings.panelMessage.channel);
             if (channel && (channel.type === 'GUILD_NEWS' || channel.type === 'GUILD_TEXT')) {
                 const embed = new discord_js_1.MessageEmbed()
                     .setTitle(data.settings.panelMessage.message.title)
                     .setDescription((0, placeholderReplace_1.default)(data.settings.panelMessage.message.description, { name: guild.guildName, id: guild.guildId }))
                     .setColor(parseInt(data.settings.panelMessage.message.color.replace('#', ''), 16));
+                if (!data.settings.panelMessage.message.description)
+                    return { error: "The panel message description cannot be empty." };
                 if (data.settings.panelMessage.message.thumbnail)
                     embed.setThumbnail(data.settings.panelMessage.message.thumbnail);
                 if (data.settings.panelMessage.message.titleUrl)
@@ -257,16 +271,21 @@ async function postTicketsSettings(guildId, data) {
                 if (data.settings.panelMessage.message.timestamp)
                     embed.setTimestamp();
                 const ticketCategories = await schemas_1.TicketCategory.find({ guildId });
-                ticketCategories.forEach(async (category) => await schemas_1.TicketCategory.deleteOne({ _id: category._id }));
-                let components = null;
-                if (data.settings.categories.length > 0) {
-                    components = new discord_js_3.MessageActionRow().addComponents(new discord_js_1.MessageSelectMenu()
-                        .setCustomId('ticket-create')
-                        .setPlaceholder('Select a Ticket Category'));
-                }
-                ;
                 data.settings.categories.forEach(async (category) => {
-                    const newCategory = new schemas_1.TicketCategory({
+                    if (ticketCategories.some((c) => ({
+                        categoryChannel: c.categoryChannel,
+                        label: c.label,
+                        maxTickets: c.maxTickets,
+                        supportRoles: c.supportRoles,
+                        welcomeMessage: {
+                            message: c.welcomeMessage.message,
+                            color: c.welcomeMessage.color,
+                        },
+                        deleteOnClose: c.deleteOnClose,
+                        moveToClosedCategory: c.moveToClosedCategory,
+                    }) === category))
+                        return;
+                    await schemas_1.TicketCategory.create({
                         guildId,
                         categoryChannel: category.categoryChannel,
                         label: category.label,
@@ -279,10 +298,15 @@ async function postTicketsSettings(guildId, data) {
                         deleteOnClose: category.deleteOnClose,
                         moveToClosedCategory: category.moveToClosedCategory,
                     });
-                    await newCategory.save().then((doc) => {
-                        components?.components[0].addOptions({ label: doc.label, value: String(doc._id) });
-                    });
                 });
+                let components = null;
+                if ((await schemas_1.TicketCategory.find({ guildId })).length > 0) {
+                    components = new discord_js_3.MessageActionRow().addComponents(new discord_js_1.MessageSelectMenu()
+                        .setCustomId('ticket-create')
+                        .setPlaceholder('Select a Ticket Category')
+                        .addOptions((await schemas_1.TicketCategory.find({ guildId })).map((category) => ({ label: category.label, value: String(category._id) }))));
+                }
+                ;
                 const prevChannel = client_1.client.channels.cache.get(prevData.panelMessage.channel);
                 if (prevChannel && (prevChannel.type === 'GUILD_NEWS' || prevChannel.type === 'GUILD_TEXT')) {
                     if (prevData.panelMessage.id) {
@@ -293,8 +317,10 @@ async function postTicketsSettings(guildId, data) {
                     ;
                 }
                 ;
-                if (!data.settings.panelMessage.message.description)
-                    return { error: "The panel message description cannot be empty." };
+                if (!data.settings.panelMessage.id)
+                    data.settings.panelMessage.id = guild.modules.tickets.panelMessage.id;
+                if (!data.settings.panelMessage.url)
+                    data.settings.panelMessage.url = guild.modules.tickets.panelMessage.url;
                 try {
                     const message = await channel.send({
                         embeds: [embed],
@@ -309,20 +335,18 @@ async function postTicketsSettings(guildId, data) {
                 }
                 ;
             }
-            ;
+            else
+                return { error: "The panel message channel you specified is not valid." };
         }
-        ;
+        guild.modules.tickets = data.settings;
+        guild.commands.tickets = data.commands;
+        await guild.save();
+        return { guild, error: null };
     }
-    if (!data.settings.panelMessage.id)
-        data.settings.panelMessage.id = guild.modules.tickets.panelMessage.id;
-    if (!data.settings.panelMessage.url)
-        data.settings.panelMessage.url = guild.modules.tickets.panelMessage.url;
-    guild.modules.tickets = data.settings;
-    guild.commands.tickets = data.commands;
-    await guild.save();
-    return { guild, error: null };
+    ;
 }
 exports.postTicketsSettings = postTicketsSettings;
+;
 async function getModerationSettings(guildId) {
     const guild = await schemas_1.Guild.findOne({ guildId });
     if (!guild)

@@ -90,18 +90,6 @@ const GuildSchema = new mongoose_1.Schema({
             logChannel: { type: String, required: false, default: '' },
             closedCategory: { type: String, required: false, default: '' },
             ticketCount: { type: Number, required: false, default: 0 },
-            categories: { type: [{
-                        categoryChannel: String,
-                        label: String,
-                        maxTickets: Number,
-                        supportRoles: [String],
-                        welcomeMessage: {
-                            message: String,
-                            color: String,
-                        },
-                        deleteOnClose: Boolean,
-                        moveToClosedCategory: Boolean,
-                    }], required: false, default: [] },
         },
         moderation: {
             moderatorRoles: { type: [String], required: false, default: [] },

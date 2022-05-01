@@ -94,18 +94,6 @@ export interface Guild {
       logChannel: string;
       closedCategory: string;
       ticketCount: number;
-      categories: {
-        categoryChannel: string;
-        label: string;
-        maxTickets: number;
-        supportRoles: string[];
-        welcomeMessage: {
-          message: string;
-          color: string;
-        };
-        deleteOnClose: boolean;
-        moveToClosedCategory: boolean;
-      }[];
     };
 
     moderation: {
@@ -380,18 +368,6 @@ const GuildSchema = new Schema<Guild>({
       logChannel: { type: String, required: false, default: '' },
       closedCategory: { type: String, required: false, default: '' },
       ticketCount: { type: Number, required: false, default: 0 },
-      categories: { type: [{
-        categoryChannel: String,
-        label: String,
-        maxTickets: Number,
-        supportRoles: [String],
-        welcomeMessage: {
-          message: String,
-          color: String,
-        },
-        deleteOnClose: Boolean,
-        moveToClosedCategory: Boolean,
-      }], required: false, default: [] },
     },
 
     moderation: {

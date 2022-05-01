@@ -36,10 +36,6 @@ const UserSchema = new mongoose_1.Schema({
         type: mongoose_1.default.SchemaTypes.Boolean,
         default: false,
     },
-    voteAmount: {
-        type: mongoose_1.default.SchemaTypes.Number,
-        default: 0,
-    },
     accessToken: {
         type: mongoose_1.default.SchemaTypes.String,
         required: true,

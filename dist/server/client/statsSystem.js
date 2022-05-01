@@ -4,14 +4,6 @@ const tslib_1 = require("tslib");
 const node_fetch_1 = tslib_1.__importDefault(require("node-fetch"));
 exports.default = (client) => {
     setInterval(() => {
-        (0, node_fetch_1.default)('https://botlist.scarps.club/api/auth/stats/900398063607242762', {
-            method: "POST",
-            headers: {
-                Authorization: process.env.SCARPS_BOTLIST_TOKEN,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ "server_count": client.guilds.cache.size })
-        }).then(response => response.text()).catch(console.error);
         (0, node_fetch_1.default)('https://bots.discordlabs.org/v2/bot/900398063607242762/stats', {
             method: "POST",
             headers: {
@@ -35,6 +27,14 @@ exports.default = (client) => {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({ "server_count": client.guilds.cache.size })
+        }).then(response => response.text()).catch(console.error);
+        (0, node_fetch_1.default)('https://api.infinitybotlist.com/bots/stats', {
+            method: "POST",
+            headers: {
+                Authorization: process.env.INFINITY_BOTS_TOKEN,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ "servers": client.guilds.cache.size })
         }).then(response => response.text()).catch(console.error);
     }, 60000);
 };

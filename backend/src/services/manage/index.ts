@@ -1,10 +1,9 @@
-import { MessageEmbed } from "discord.js";
-import { ColorResolvable } from "discord.js";
+import { MessageEmbed, MessageSelectMenu } from "discord.js";
 import { MessageButton } from "discord.js";
 import { MessageActionRow } from "discord.js";
 import { client } from "../../client";
 import { checkForBotPermissionInCategory, checkForBotPermissionInChannel, checkForBotPermissionManageRole } from "../../client/methods";
-import { Guild } from "../../database/schemas";
+import { Guild, TicketCategory } from "../../database/schemas";
 import { createActionLog, validEmbed } from "../../utils/functions";
 import placeholderReplace from "../../utils/placeholderReplace";
 
@@ -321,7 +320,7 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
     if (botHasPermissionsInPanelMessageChannel === 1) return { error: "The bot does not have permission to send messages in the panel message channel you specified." };
 
     if (data.settings.categories.length === 0) return { error: "You must specify at least one category." };
-    if (data.settings.categories.length > 5) return { error: "You can only have a maximum of 5 categories." };
+    if (data.settings.categories.length > 15) return { error: "You can only have a maximum of 15 categories." };
 
     data.settings.categories.forEach((category) => {
       const botHasPermissionsInCategoryChannel: 0 | 1 | 2 = checkForBotPermissionInCategory(category.categoryChannel, "MANAGE_CHANNELS");
@@ -349,18 +348,35 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
         if (data.settings.panelMessage.message.image) embed.setImage(data.settings.panelMessage.message.image);
         if (data.settings.panelMessage.message.timestamp) embed.setTimestamp();
 
+        const ticketCategories = await TicketCategory.find({ guildId });
+        ticketCategories.forEach(async (category) => await category.delete());
+
+        const options: { label: string, value: string }[] = [];
+
+        data.settings.categories.forEach(async (category) => {
+          await TicketCategory.create({
+            guildId,
+            categoryChannel: category.categoryChannel,
+            label: category.label,
+            maxTickets: category.maxTickets,
+            supportRoles: category.supportRoles,
+            welcomeMessage: {
+              message: category.welcomeMessage.message,
+              color: category.welcomeMessage.color,
+            },
+            deleteOnClose: category.deleteOnClose,
+            moveToClosedCategory: category.moveToClosedCategory,
+          }).then((doc) => options.push({ label: doc.label, value: String(doc._id) }));
+        });
+
         let components: null | MessageActionRow = null;
         if (data.settings.categories.length > 0) {
-          components = new MessageActionRow();
-          data.settings.categories.forEach((category) => {
-            components!.addComponents(
-              new MessageButton()
-                .setLabel(category.label)
-                .setCustomId(`ticket-create-${category.label.toLowerCase().replaceAll(' ', '%')}`)
-                .setEmoji('📨')
-                .setStyle('SECONDARY'),
-            );
-          });
+          components = new MessageActionRow().addComponents(
+            new MessageSelectMenu()
+              .setCustomId('ticket-create')
+              .setPlaceholder('Select a Ticket Category')
+              .addOptions(options),
+          );
         };
 
         const prevChannel = client.channels.cache.get(prevData.panelMessage.channel);
@@ -410,18 +426,6 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
     logChannel: string;
     closedCategory: string;
     ticketCount: number;
-    categories: {
-      categoryChannel: string;
-      label: string;
-      maxTickets: number;
-      supportRoles: string[];
-      welcomeMessage: {
-        message: string;
-        color: string;
-      };
-      deleteOnClose: boolean;
-      moveToClosedCategory: boolean;
-    }[];
   };
   guild.commands.tickets = data.commands;
 

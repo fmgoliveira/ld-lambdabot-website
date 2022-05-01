@@ -239,9 +239,9 @@ export const ManageTicketsPage = ({ user }: { user: User }) => {
         showIcon: true
       }
     })
-    if (data.settings.categories.length >= 5) return Store.addNotification({
+    if (data.settings.categories.length >= 15) return Store.addNotification({
       title: 'Error',
-      message: 'You can only have 5 categories.',
+      message: 'You can only have 15 categories.',
       type: 'danger',
       insert: 'bottom',
       container: 'bottom-right',

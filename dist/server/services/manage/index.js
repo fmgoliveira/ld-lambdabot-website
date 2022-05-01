@@ -209,8 +209,8 @@ async function postTicketsSettings(guildId, data) {
             return { error: "The bot does not have permission to send messages in the panel message channel you specified." };
         if (data.settings.categories.length === 0)
             return { error: "You must specify at least one category." };
-        if (data.settings.categories.length > 5)
-            return { error: "You can only have a maximum of 5 categories." };
+        if (data.settings.categories.length > 15)
+            return { error: "You can only have a maximum of 15 categories." };
         data.settings.categories.forEach((category) => {
             const botHasPermissionsInCategoryChannel = (0, methods_1.checkForBotPermissionInCategory)(category.categoryChannel, "MANAGE_CHANNELS");
             if (botHasPermissionsInCategoryChannel === 0)
@@ -242,16 +242,30 @@ async function postTicketsSettings(guildId, data) {
                     embed.setImage(data.settings.panelMessage.message.image);
                 if (data.settings.panelMessage.message.timestamp)
                     embed.setTimestamp();
+                const ticketCategories = await schemas_1.TicketCategory.find({ guildId });
+                ticketCategories.forEach(async (category) => await category.delete());
+                const options = [];
+                data.settings.categories.forEach(async (category) => {
+                    await schemas_1.TicketCategory.create({
+                        guildId,
+                        categoryChannel: category.categoryChannel,
+                        label: category.label,
+                        maxTickets: category.maxTickets,
+                        supportRoles: category.supportRoles,
+                        welcomeMessage: {
+                            message: category.welcomeMessage.message,
+                            color: category.welcomeMessage.color,
+                        },
+                        deleteOnClose: category.deleteOnClose,
+                        moveToClosedCategory: category.moveToClosedCategory,
+                    }).then((doc) => options.push({ label: doc.label, value: String(doc._id) }));
+                });
                 let components = null;
                 if (data.settings.categories.length > 0) {
-                    components = new discord_js_3.MessageActionRow();
-                    data.settings.categories.forEach((category) => {
-                        components.addComponents(new discord_js_2.MessageButton()
-                            .setLabel(category.label)
-                            .setCustomId(`ticket-create-${category.label.toLowerCase().replaceAll(' ', '%')}`)
-                            .setEmoji('📨')
-                            .setStyle('SECONDARY'));
-                    });
+                    components = new discord_js_3.MessageActionRow().addComponents(new discord_js_1.MessageSelectMenu()
+                        .setCustomId('ticket-create')
+                        .setPlaceholder('Select a Ticket Category')
+                        .addOptions(options));
                 }
                 ;
                 const prevChannel = client_1.client.channels.cache.get(prevData.panelMessage.channel);

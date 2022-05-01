@@ -901,7 +901,7 @@ export const ManageTicketsPage = ({ user }: { user: User }) => {
                       <div className="modal-body text-light">
                         <div className="input-group input-group-static ps-0 ms-1 mt-4">
                           <label className="text-light text-xs" htmlFor="ticketsCategoryLabel">
-                            Button Label
+                            Category Label
                           </label>
                           <input type='text' maxLength={80} className="form-control ms-auto text-white" value={ticketsCategoryLabel || ''} id="ticketsCategoryLabel" name="ticketsCategoryLabel" onChange={handleChange} />
                         </div>
@@ -1044,7 +1044,7 @@ export const ManageTicketsPage = ({ user }: { user: User }) => {
                 </div>
                 <div className="form-check form-switch ps-0 ms-1">
                   <input className="form-check-input ms-auto mt-1" type="checkbox" checked={reopenCommand || data.commands.reopen} id="reopenCommand" name="reopenCommand" onChange={handleChange} />
-                  <label className="form-check-label ms-3 text-light" htmlFor="reopenCommand">Pause a giveaway <br /> <code>/ticket reopen &lt;ping_members&gt;</code></label>
+                  <label className="form-check-label ms-3 text-light" htmlFor="reopenCommand">Reopen a ticket <br /> <code>/ticket reopen &lt;ping_members&gt;</code></label>
                 </div>
                 <div className="form-check form-switch ps-0 ms-1">
                   <input className="form-check-input ms-auto mt-1" type="checkbox" checked={deleteCommand || data.commands.delete} id="deleteCommand" name="deleteCommand" onChange={handleChange} />

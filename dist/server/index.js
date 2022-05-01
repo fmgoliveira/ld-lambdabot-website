@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
+if (process.env.ENV !== 'production')
+    require('dotenv').config();
 const client_1 = tslib_1.__importDefault(require("./client"));
 require("./database");
 const express_1 = require("express");

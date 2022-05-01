@@ -259,6 +259,13 @@ async function postTicketsSettings(guildId, data) {
                 const ticketCategories = await schemas_1.TicketCategory.find({ guildId });
                 ticketCategories.forEach(async (category) => await category.delete());
                 const options = [];
+                let components = null;
+                if (data.settings.categories.length > 0) {
+                    components = new discord_js_3.MessageActionRow().addComponents(new discord_js_1.MessageSelectMenu()
+                        .setCustomId('ticket-create')
+                        .setPlaceholder('Select a Ticket Category'));
+                }
+                ;
                 data.settings.categories.forEach(async (category) => {
                     await schemas_1.TicketCategory.create({
                         guildId,
@@ -272,16 +279,8 @@ async function postTicketsSettings(guildId, data) {
                         },
                         deleteOnClose: category.deleteOnClose,
                         moveToClosedCategory: category.moveToClosedCategory,
-                    }).then((doc) => options.push({ label: doc.label, value: String(doc._id) }));
+                    }).then((doc) => components?.components[0].addOptions({ label: doc.label, value: String(doc._id) }));
                 });
-                let components = null;
-                if (data.settings.categories.length > 0) {
-                    components = new discord_js_3.MessageActionRow().addComponents(new discord_js_1.MessageSelectMenu()
-                        .setCustomId('ticket-create')
-                        .setPlaceholder('Select a Ticket Category')
-                        .addOptions(options));
-                }
-                ;
                 const prevChannel = client_1.client.channels.cache.get(prevData.panelMessage.channel);
                 if (prevChannel && (prevChannel.type === 'GUILD_NEWS' || prevChannel.type === 'GUILD_TEXT')) {
                     if (prevData.panelMessage.id) {

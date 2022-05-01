@@ -1,3 +1,4 @@
+if (process.env.ENV !== 'production') require('dotenv').config();
 import clientConnection from './client';
 import './database';
 import { Router } from 'express';

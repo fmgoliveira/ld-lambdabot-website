@@ -385,7 +385,7 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
         });
 
         data.settings.categories.forEach(async (category) => {
-          await TicketCategory.create({
+          const newTicketCategory = new TicketCategory({
             guildId,
             categoryChannel: category.categoryChannel,
             label: category.label,
@@ -398,37 +398,42 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
             deleteOnClose: category.deleteOnClose,
             moveToClosedCategory: category.moveToClosedCategory,
           });
+
+          await newTicketCategory.save();
         });
 
-        const components = new MessageActionRow().addComponents(
-          new MessageSelectMenu()
-            .setCustomId('ticket-create')
-            .setPlaceholder('Select a Ticket Category')
-            .addOptions((await TicketCategory.find({ guildId })).map((category) => ({ label: category.label, value: String(category._id) }))),
-        );
-
-        const prevChannel = client.channels.cache.get(prevData.panelMessage.channel);
-        if (prevChannel && (prevChannel.type === 'GUILD_NEWS' || prevChannel.type === 'GUILD_TEXT')) {
-          if (prevData.panelMessage.id) {
-            const oldMessage = await prevChannel.messages.fetch(prevData.panelMessage.id).catch(() => {});
-            if (oldMessage) oldMessage.deletable ? oldMessage.delete().catch(() => {}) : null;
+        setTimeout(async () => {
+          const components = new MessageActionRow().addComponents(
+            new MessageSelectMenu()
+              .setCustomId('ticket-create')
+              .setPlaceholder('Select a Ticket Category')
+              .addOptions((await TicketCategory.find({ guildId })).map((category) => ({ label: category.label, value: String(category._id) }))),
+          );
+  
+          const prevChannel = client.channels.cache.get(prevData.panelMessage.channel);
+          if (prevChannel && (prevChannel.type === 'GUILD_NEWS' || prevChannel.type === 'GUILD_TEXT')) {
+            if (prevData.panelMessage.id) {
+              const oldMessage = await prevChannel.messages.fetch(prevData.panelMessage.id).catch(() => {});
+              if (oldMessage) oldMessage.deletable ? oldMessage.delete().catch(() => {}) : null;
+            };
           };
-        };
+  
+          if (!data.settings!.panelMessage.id) data.settings!.panelMessage.id = guild.modules.tickets.panelMessage.id;
+          if (!data.settings!.panelMessage.url) data.settings!.panelMessage.url = guild.modules.tickets.panelMessage.url;
+  
+          try {
+            const message = await channel.send({
+              embeds: [embed],
+              components: [components],
+            });
+            data.settings!.panelMessage.id = message.id;
+            data.settings!.panelMessage.url = message.url;
+          } catch (err) {
+            console.log(err)
+            return { error: "There was an error sending the panel message. Please make sure the bot has permissions and try again." };
+          };
+        }, 5000);
 
-        if (!data.settings.panelMessage.id) data.settings.panelMessage.id = guild.modules.tickets.panelMessage.id;
-        if (!data.settings.panelMessage.url) data.settings.panelMessage.url = guild.modules.tickets.panelMessage.url;
-
-        try {
-          const message = await channel.send({
-            embeds: [embed],
-            components: [components],
-          });
-          data.settings.panelMessage.id = message.id;
-          data.settings.panelMessage.url = message.url;
-        } catch (err) {
-          console.log(err)
-          return { error: "There was an error sending the panel message. Please make sure the bot has permissions and try again." };
-        };
       } else return { error: "The panel message channel you specified is not valid." };
     }
 

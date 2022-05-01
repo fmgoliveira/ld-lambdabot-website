@@ -363,7 +363,7 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
         if (data.settings.panelMessage.message.timestamp) embed.setTimestamp();
 
         const ticketCategories = await TicketCategory.find({ guildId });
-        ticketCategories.forEach(async (category) => await category.delete());
+        ticketCategories.forEach(async (category) => await TicketCategory.deleteOne({ _id: category._id }));
 
         let components: null | MessageActionRow = null;
         if (data.settings.categories.length > 0) {
@@ -375,7 +375,7 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
         };
 
         data.settings.categories.forEach(async (category) => {
-          await TicketCategory.create({
+          const newCategory = new TicketCategory({
             guildId,
             categoryChannel: category.categoryChannel,
             label: category.label,
@@ -387,9 +387,10 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
             },
             deleteOnClose: category.deleteOnClose,
             moveToClosedCategory: category.moveToClosedCategory,
-          }).then((doc) => (components?.components[0] as MessageSelectMenu).addOptions({ label: doc.label, value: String(doc._id) })).catch((err) => {
-            console.log(err);
-            return { error: "An error occurred while creating the ticket category." };
+          })
+          
+          await newCategory.save().then((doc) => {
+            (components?.components[0] as MessageSelectMenu).addOptions({ label: doc.label, value: String(doc._id) })
           });
         });
 

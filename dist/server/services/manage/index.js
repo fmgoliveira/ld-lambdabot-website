@@ -257,7 +257,7 @@ async function postTicketsSettings(guildId, data) {
                 if (data.settings.panelMessage.message.timestamp)
                     embed.setTimestamp();
                 const ticketCategories = await schemas_1.TicketCategory.find({ guildId });
-                ticketCategories.forEach(async (category) => await category.delete());
+                ticketCategories.forEach(async (category) => await schemas_1.TicketCategory.deleteOne({ _id: category._id }));
                 let components = null;
                 if (data.settings.categories.length > 0) {
                     components = new discord_js_3.MessageActionRow().addComponents(new discord_js_1.MessageSelectMenu()
@@ -266,7 +266,7 @@ async function postTicketsSettings(guildId, data) {
                 }
                 ;
                 data.settings.categories.forEach(async (category) => {
-                    await schemas_1.TicketCategory.create({
+                    const newCategory = new schemas_1.TicketCategory({
                         guildId,
                         categoryChannel: category.categoryChannel,
                         label: category.label,
@@ -278,9 +278,9 @@ async function postTicketsSettings(guildId, data) {
                         },
                         deleteOnClose: category.deleteOnClose,
                         moveToClosedCategory: category.moveToClosedCategory,
-                    }).then((doc) => components?.components[0].addOptions({ label: doc.label, value: String(doc._id) })).catch((err) => {
-                        console.log(err);
-                        return { error: "An error occurred while creating the ticket category." };
+                    });
+                    await newCategory.save().then((doc) => {
+                        components?.components[0].addOptions({ label: doc.label, value: String(doc._id) });
                     });
                 });
                 const prevChannel = client_1.client.channels.cache.get(prevData.panelMessage.channel);

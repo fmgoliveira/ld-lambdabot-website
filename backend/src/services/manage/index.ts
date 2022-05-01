@@ -382,18 +382,9 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
         const ticketCategories = await TicketCategory.find({ guildId });
 
         data.settings.categories.forEach(async (category) => {
-          if (ticketCategories.some((c) => ({
-            categoryChannel: c.categoryChannel,
-            label: c.label,
-            maxTickets: c.maxTickets,
-            supportRoles: c.supportRoles,
-            welcomeMessage: {
-              message: c.welcomeMessage.message,
-              color: c.welcomeMessage.color,
-            },
-            deleteOnClose: c.deleteOnClose,
-            moveToClosedCategory: c.moveToClosedCategory,
-          }) === category)) return;
+          ticketCategories.forEach(async (ticketCategory) => {
+            await ticketCategory.delete();
+          });
 
           await TicketCategory.create({
             guildId,

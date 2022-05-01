@@ -365,8 +365,6 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
         const ticketCategories = await TicketCategory.find({ guildId });
         ticketCategories.forEach(async (category) => await category.delete());
 
-        const options: { label: string, value: string }[] = [];
-
         let components: null | MessageActionRow = null;
         if (data.settings.categories.length > 0) {
           components = new MessageActionRow().addComponents(
@@ -387,8 +385,8 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
               message: category.welcomeMessage.message,
               color: category.welcomeMessage.color,
             },
-            deleteOnClose: category.deleteOnClose,
-            moveToClosedCategory: category.moveToClosedCategory,
+            deleteOnClose: category.deleteOnClose ? true : false,
+            moveToClosedCategory: category.moveToClosedCategory ? true : false,
           }).then((doc) => (components?.components[0] as MessageSelectMenu).addOptions({ label: doc.label, value: String(doc._id) }));
         });
 

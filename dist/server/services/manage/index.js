@@ -258,7 +258,6 @@ async function postTicketsSettings(guildId, data) {
                     embed.setTimestamp();
                 const ticketCategories = await schemas_1.TicketCategory.find({ guildId });
                 ticketCategories.forEach(async (category) => await category.delete());
-                const options = [];
                 let components = null;
                 if (data.settings.categories.length > 0) {
                     components = new discord_js_3.MessageActionRow().addComponents(new discord_js_1.MessageSelectMenu()
@@ -277,8 +276,8 @@ async function postTicketsSettings(guildId, data) {
                             message: category.welcomeMessage.message,
                             color: category.welcomeMessage.color,
                         },
-                        deleteOnClose: category.deleteOnClose,
-                        moveToClosedCategory: category.moveToClosedCategory,
+                        deleteOnClose: category.deleteOnClose ? true : false,
+                        moveToClosedCategory: category.moveToClosedCategory ? true : false,
                     }).then((doc) => components?.components[0].addOptions({ label: doc.label, value: String(doc._id) }));
                 });
                 const prevChannel = client_1.client.channels.cache.get(prevData.panelMessage.channel);

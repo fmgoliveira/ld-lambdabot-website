@@ -398,9 +398,7 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
         });
 
         let components: null | MessageActionRow = null;
-        console.log((await TicketCategory.find({ guildId })).length || 'UNDEFINED');
         if ((await TicketCategory.find({ guildId })).length > 0) {
-          console.log('Creating components');
           components = new MessageActionRow().addComponents(
             new MessageSelectMenu()
               .setCustomId('ticket-create')

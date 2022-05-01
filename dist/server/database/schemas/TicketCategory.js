@@ -4,15 +4,15 @@ const tslib_1 = require("tslib");
 const mongoose_1 = tslib_1.__importStar(require("mongoose"));
 const TicketCategorySchema = new mongoose_1.Schema({
     guildId: { type: String, required: true },
-    categoryChannel: { type: String, required: true },
-    label: { type: String, required: true },
-    maxTickets: { type: Number, required: true },
-    supportRoles: { type: [String], required: true },
+    categoryChannel: { type: String, required: false, default: '' },
+    label: { type: String, required: false, default: '' },
+    maxTickets: { type: Number, required: false, default: 0 },
+    supportRoles: { type: [String], required: false, default: [] },
     welcomeMessage: {
         type: {
-            message: { type: String, required: true },
-            color: { type: String, required: true },
-        }, required: true
+            message: { type: String, required: false, default: '' },
+            color: { type: String, required: false, default: '#000000' },
+        }, required: false,
     },
     deleteOnClose: { type: Boolean, required: false, default: false },
     moveToClosedCategory: { type: Boolean, required: false, default: false },

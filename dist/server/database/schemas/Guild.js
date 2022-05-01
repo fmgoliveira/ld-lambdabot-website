@@ -78,7 +78,7 @@ const GuildSchema = new mongoose_1.Schema({
                 url: { type: String, required: false, default: '' },
                 message: {
                     title: { type: String, required: false, default: 'Open a Ticket' },
-                    description: { type: String, required: false, default: 'Click the corresponding button below to open a support ticket between you and the Support Team of {guild}.' },
+                    description: { type: String, required: false, default: 'Choose the corresponding category below to open a support ticket between you and the Support Team of {guild}.' },
                     color: { type: String, required: false, default: '#000000' },
                     thumbnail: { type: String, required: false, default: '' },
                     titleUrl: { type: String, required: false, default: '' },

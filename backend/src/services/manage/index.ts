@@ -385,9 +385,12 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
               message: category.welcomeMessage.message,
               color: category.welcomeMessage.color,
             },
-            deleteOnClose: category.deleteOnClose ? true : false,
-            moveToClosedCategory: category.moveToClosedCategory ? true : false,
-          }).then((doc) => (components?.components[0] as MessageSelectMenu).addOptions({ label: doc.label, value: String(doc._id) }));
+            deleteOnClose: category.deleteOnClose,
+            moveToClosedCategory: category.moveToClosedCategory,
+          }).then((doc) => (components?.components[0] as MessageSelectMenu).addOptions({ label: doc.label, value: String(doc._id) })).catch((err) => {
+            console.log(err);
+            return { error: "An error occurred while creating the ticket category." };
+          });
         });
 
         const prevChannel = client.channels.cache.get(prevData.panelMessage.channel);

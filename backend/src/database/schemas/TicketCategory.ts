@@ -28,8 +28,8 @@ const TicketCategorySchema = new Schema<TicketCategory>({
       color: { type: String, required: true },
     }, required: true
   },
-  deleteOnClose: { type: Boolean, required: true },
-  moveToClosedCategory: { type: Boolean, required: true },
+  deleteOnClose: { type: Boolean, required: false, default: false },
+  moveToClosedCategory: { type: Boolean, required: false, default: false },
 });
 
 export default mongoose.model('ticketCategories', TicketCategorySchema);

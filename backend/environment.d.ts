@@ -11,8 +11,9 @@ declare global {
       MONGO_URL: string;
       LOGS_WEBHOOK_ID: string;
       LOGS_WEBHOOK_TOKEN: string;
+      ERROR_WEBHOOK_ID: string;
+      ERROR_WEBHOOK_TOKEN: string;
       LAMBDA_GUILD_ID: string;
-      SCARPS_BOTLIST_TOKEN: string;
       DISCORD_LABS_TOKEN: string;
       BOTSFORDISCORD_TOKEN: string;
       TOP_GG_TOKEN: string;

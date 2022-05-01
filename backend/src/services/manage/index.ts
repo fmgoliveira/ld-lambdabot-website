@@ -365,15 +365,6 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
         const ticketCategories = await TicketCategory.find({ guildId });
         ticketCategories.forEach(async (category) => await TicketCategory.deleteOne({ _id: category._id }));
 
-        let components: null | MessageActionRow = null;
-        if (data.settings.categories.length > 0) {
-          components = new MessageActionRow().addComponents(
-            new MessageSelectMenu()
-              .setCustomId('ticket-create')
-              .setPlaceholder('Select a Ticket Category')
-          );
-        };
-
         data.settings.categories.forEach(async (category) => {
           const newCategory = new TicketCategory({
             guildId,
@@ -388,11 +379,19 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
             deleteOnClose: category.deleteOnClose,
             moveToClosedCategory: category.moveToClosedCategory,
           })
-          
-          await newCategory.save().then((doc) => {
-            (components?.components[0] as MessageSelectMenu).addOptions({ label: doc.label, value: String(doc._id) })
-          });
+
+          await newCategory.save()
         });
+
+        let components: null | MessageActionRow = null;
+        if (data.settings.categories.length > 0) {
+          components = new MessageActionRow().addComponents(
+            new MessageSelectMenu()
+              .setCustomId('ticket-create')
+              .setPlaceholder('Select a Ticket Category')
+              .addOptions((await TicketCategory.find({ guildId })).map((category) => ({ label: category.label, value: String(category._id) }))),
+          );
+        };
 
         const prevChannel = client.channels.cache.get(prevData.panelMessage.channel);
         if (prevChannel && (prevChannel.type === 'GUILD_NEWS' || prevChannel.type === 'GUILD_TEXT')) {

@@ -421,7 +421,7 @@ export const ManageAdministrationPage = ({ user }: { user: User }) => {
 
                 <div className="form-check form-switch ps-0 ms-1 mt-2">
                   <input className="form-check-input ms-auto mt-1" type="checkbox" checked={giveawayStartCommand || data.commands.giveaway.start} id="giveawayStartCommand" name="giveawayStartCommand" onChange={handleChange} />
-                  <label className="form-check-label ms-3 text-light" htmlFor="giveawayStartCommand">Start a giveaway <br /> <code>/giveaway start &lt;time&gt; &lt;winners&gt; &lt;prize&gt; [channel]</code></label>
+                  <label className="form-check-label ms-3 text-light" htmlFor="giveawayStartCommand">Start a giveaway <br /> <code>/giveaway start &lt;time&gt; &lt;winners&gt; &lt;prize&gt; [channel] [hosted_by] [drop]</code></label>
                 </div>
                 <div className="form-check form-switch ps-0 ms-1">
                   <input className="form-check-input ms-auto mt-1" type="checkbox" checked={giveawayEndCommand || data.commands.giveaway.end} id="giveawayEndCommand" name="giveawayEndCommand" onChange={handleChange} />

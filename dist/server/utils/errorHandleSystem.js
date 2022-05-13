@@ -13,12 +13,14 @@ process.on('uncaughtException', (err) => {
                 .setColor('#2f3136')
                 .setTimestamp()
                 .setTitle('**[ERROR]** Uncaught Exception')
-                .setDescription(err.stack?.substring(0, 4096) || `**${err.name}:** ${err.message}`.substring(0, 4096)),
+                .setDescription(String(err).substring(0, 4096) || `**${err.name}:** ${err.message}`.substring(0, 4096)),
         ],
     }).catch((e) => console.log(e));
     console.log(err);
 });
 process.on('unhandledRejection', (err, promise) => {
+    if (err.message === 'Gateway Time-out')
+        return console.log(err);
     webhook.send({
         embeds: [
             new discord_js_1.MessageEmbed()
@@ -26,7 +28,7 @@ process.on('unhandledRejection', (err, promise) => {
                 .setColor('#2f3136')
                 .setTimestamp()
                 .setTitle('**[ERROR]** Unhandled Rejection')
-                .setDescription(err.stack?.substring(0, 4096) || err.name && err.message ? `**${err.name}:** ${err.message}`.substring(0, 4096) : `Process could not handle promise.\n\`\`\`${promise}\`\`\``.substring(0, 4096)),
+                .setDescription(String(err).substring(0, 4096) || err.name && err.message ? `**${err.name}:** ${err.message}`.substring(0, 4096) : `Process could not handle promise.\n\`\`\`${promise}\`\`\``.substring(0, 4096)),
         ]
     }).catch((e) => console.log(e));
     console.log(err);

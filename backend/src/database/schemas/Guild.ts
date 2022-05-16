@@ -284,7 +284,7 @@ const GuildSchema = new Schema<Guild>({
 
   modules: {
     administration: {
-      staffRoles: { type: String, required: false, default: [] },
+      staffRoles: { type: [String], required: false, default: [] },
       chatbot: {
         enabled: { type: Boolean, required: false, default: false },
         channels: { type: [String], required: false, default: [] },

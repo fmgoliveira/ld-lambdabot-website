@@ -15,7 +15,7 @@ router.post("/discordswebhook", body_parser_1.default.json(), async (req, res) =
     if (bot !== process.env.DISCORD_CLIENT_ID)
         return;
     const timestamp = Date.now();
-    if ((await schemas_1.Vote.find({ userId: user })).length > 1)
+    if ((await schemas_1.Vote.find({ userId: user })).length > 0)
         await schemas_1.Vote.create({
             userId: user,
             timestamp: timestamp + (await schemas_1.Vote.find({ userId: user })).length * 12 * 60 * 60 * 1000,
@@ -40,7 +40,7 @@ router.post("/topggwebhook", body_parser_1.default.json(), async (req, res) => {
     if (type === "test")
         return;
     const timestamp = Date.now();
-    if ((await schemas_1.Vote.find({ userId: user })).length > 1)
+    if ((await schemas_1.Vote.find({ userId: user })).length > 0)
         await schemas_1.Vote.create({
             userId: user,
             timestamp: timestamp + (await schemas_1.Vote.find({ userId: user })).length * 12 * 60 * 60 * 1000,
@@ -65,7 +65,7 @@ router.post("/infinitybotswebhook", body_parser_1.default.json(), async (req, re
     if (type === "TEST")
         return;
     const timestamp = Date.now();
-    if ((await schemas_1.Vote.find({ userId: userID })).length > 1)
+    if ((await schemas_1.Vote.find({ userId: userID })).length > 0)
         await schemas_1.Vote.create({
             userId: userID,
             timestamp: timestamp + (await schemas_1.Vote.find({ userId: userID })).length * 12 * 60 * 60 * 1000,
@@ -90,7 +90,7 @@ router.post("/discordlabswebhook", body_parser_1.default.json(), async (req, res
     if (test)
         return;
     const timestamp = Date.now();
-    if ((await schemas_1.Vote.find({ userId: uid })).length > 1)
+    if ((await schemas_1.Vote.find({ userId: uid })).length > 0)
         await schemas_1.Vote.create({
             userId: uid,
             timestamp: timestamp + (await schemas_1.Vote.find({ userId: uid })).length * 12 * 60 * 60 * 1000,

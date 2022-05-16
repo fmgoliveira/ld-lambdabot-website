@@ -15,15 +15,15 @@ router.post("/discordswebhook", bodyParser.json(), async (req, res) => {
   if (bot !== process.env.DISCORD_CLIENT_ID) return;
   const timestamp = Date.now();
 
-  if ((await Vote.find({ userId: user })).length > 1) await Vote.create({
-      userId: user,
-      timestamp: timestamp + (await Vote.find({ userId: user })).length * 12 * 60 * 60 * 1000,
-      list: "botsfordiscord",
-    });
+  if ((await Vote.find({ userId: user })).length > 0) await Vote.create({
+    userId: user,
+    timestamp: timestamp + (await Vote.find({ userId: user })).length * 12 * 60 * 60 * 1000,
+    list: "botsfordiscord",
+  });
   else await Vote.create({
-      userId: user,
-      timestamp,
-      list: "botsfordiscord",
+    userId: user,
+    timestamp,
+    list: "botsfordiscord",
   });
 });
 
@@ -39,16 +39,16 @@ router.post("/topggwebhook", bodyParser.json(), async (req, res) => {
   if (type === "test") return;
   const timestamp = Date.now();
 
-  if ((await Vote.find({ userId: user })).length > 1) await Vote.create({
+  if ((await Vote.find({ userId: user })).length > 0) await Vote.create({
     userId: user,
     timestamp: timestamp + (await Vote.find({ userId: user })).length * 12 * 60 * 60 * 1000,
     list: "topgg",
   });
-else await Vote.create({
+  else await Vote.create({
     userId: user,
     timestamp,
     list: "topgg",
-});
+  });
 });
 
 router.post("/infinitybotswebhook", bodyParser.json(), async (req, res) => {
@@ -63,16 +63,16 @@ router.post("/infinitybotswebhook", bodyParser.json(), async (req, res) => {
   if (type === "TEST") return;
   const timestamp = Date.now();
 
-  if ((await Vote.find({ userId: userID })).length > 1) await Vote.create({
+  if ((await Vote.find({ userId: userID })).length > 0) await Vote.create({
     userId: userID,
     timestamp: timestamp + (await Vote.find({ userId: userID })).length * 12 * 60 * 60 * 1000,
     list: "infinitybots",
   });
-else await Vote.create({
+  else await Vote.create({
     userId: userID,
     timestamp,
     list: "infinitybots",
-});
+  });
 });
 
 router.post("/discordlabswebhook", bodyParser.json(), async (req, res) => {
@@ -87,16 +87,16 @@ router.post("/discordlabswebhook", bodyParser.json(), async (req, res) => {
   if (test) return;
   const timestamp = Date.now();
 
-  if ((await Vote.find({ userId: uid })).length > 1) await Vote.create({
+  if ((await Vote.find({ userId: uid })).length > 0) await Vote.create({
     userId: uid,
     timestamp: timestamp + (await Vote.find({ userId: uid })).length * 12 * 60 * 60 * 1000,
     list: "discordlabs",
   });
-else await Vote.create({
+  else await Vote.create({
     userId: uid,
     timestamp,
     list: "discordlabs",
-});
+  });
 });
 
 export default router;

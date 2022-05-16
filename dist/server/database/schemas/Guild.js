@@ -9,6 +9,7 @@ const GuildSchema = new mongoose_1.Schema({
     guildOwner: { type: String, required: true },
     modules: {
         administration: {
+            staffRoles: { type: String, required: false, default: [] },
             chatbot: {
                 enabled: { type: Boolean, required: false, default: false },
                 channels: { type: [String], required: false, default: [] },

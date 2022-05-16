@@ -9,6 +9,7 @@ export interface Guild {
 
   modules: {
     administration: {
+      staffRoles: string[];
       chatbot: {
         enabled: boolean;
         channels: string[];
@@ -283,6 +284,7 @@ const GuildSchema = new Schema<Guild>({
 
   modules: {
     administration: {
+      staffRoles: { type: String, required: false, default: [] },
       chatbot: {
         enabled: { type: Boolean, required: false, default: false },
         channels: { type: [String], required: false, default: [] },

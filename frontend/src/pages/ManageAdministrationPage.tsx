@@ -9,11 +9,13 @@ import { Store } from 'react-notifications-component';
 import { postModuleSettings } from "../utils/hooks/postModuleSettings"
 import { PartialChannel } from "../utils/typings/PartialChannel"
 import { Tooltip } from '@mui/material';
+import { useFetchRoles } from "../utils/hooks/useFetchRoles"
 
 export const ManageAdministrationPage = ({ user }: { user: User }) => {
   const guildId = localStorage.getItem("guildId") || ""
   const { moduleData: data, loading } = useManageModuleData(guildId, "administration")
   const { channels, loading: loading2 } = useFetchChannels(guildId)
+  const { roles, loading: loading3 } = useFetchRoles(guildId)
 
   const [chatbotEnabled, setChatbotEnabled] = useState()
   const [chatbotCommand, setChatbotCommand] = useState()
@@ -28,7 +30,7 @@ export const ManageAdministrationPage = ({ user }: { user: User }) => {
   const [emojiStr, setEmojiStr] = useState('')
   const [channelStr, setChannelStr] = useState('')
 
-  if (loading || loading2 || !data) return <Spinner />
+  if (loading || loading2 || loading3 || !data) return <Spinner />
 
   if (!guildId) {
     window.location.replace("/servers")
@@ -96,6 +98,10 @@ export const ManageAdministrationPage = ({ user }: { user: User }) => {
 
   const handleChannelSelectChange = (value: any) => {
     data.settings.chatbot.channels = value.map((channel: any) => channel.value)
+    postModuleSettings(guildId, 'administration', data, Store)
+  }
+  const handleRoleSelectChange = (value: any) => {
+    data.settings.staffRoles = value.map((role: any) => role.value)
     postModuleSettings(guildId, 'administration', data, Store)
   }
 
@@ -408,6 +414,53 @@ export const ManageAdministrationPage = ({ user }: { user: User }) => {
             </div>
             <div className="col-12 col-lg-6 mt-4 mt-lg-0">
               <div className="card card-body dash-card p-4">
+                <h4 className="text-center">Staff Roles</h4>
+                <div className="ps-0 ms-1">
+                  <small>The roles that are allowed to use staff only commands, such as <code>/giveaway</code></small>
+                </div>
+                <label htmlFor="staffRoles" className="text-light mt-3">Staff Roles</label>
+                <Select
+                  defaultValue={roles?.filter(r => data.settings.staffRoles.includes(r.id)).map(r => { return { value: r.id, label: '@' + r.name } })}
+                  isMulti
+                  name="staffRoles"
+                  id="staffRoles"
+                  options={roles?.map(r => ({ value: r.id, label: '@' + r.name }))}
+                  className='channel-role-select text-sm'
+                  onChange={handleRoleSelectChange}
+                  placeholder="Select Roles"
+                  styles={{
+                    option: (provided: any, state: any) => ({
+                      ...provided,
+                      backgroundColor: state.isFocused ? '#36393f' : '#2f3136',
+                      color: state.isFocused ? '#fff' : '#fff',
+                      cursor: "pointer",
+                      borderColor: '#2f3136',
+                    }),
+                    multiValueLabel: (provided: any, state: any) => ({
+                      ...provided,
+                      color: '#fff',
+                      backgroundColor: '#36393f',
+                    }),
+                    multiValueRemove: (provided: any, state: any) => ({
+                      ...provided,
+                      color: '#fff',
+                      backgroundColor: state.isFocused ? 'lightpink' : '#36393f',
+                    }),
+                    multiValue: (provided: any, state: any) => ({
+                      ...provided,
+                      backgroundColor: '#36393f',
+                    }),
+                    control: (provided: any, state: any) => ({
+                      ...provided,
+                      color: '#fff',
+                      backgroundColor: '#2f3136',
+                      cursor: "pointer",
+                      borderColor: '#444444',
+                    }),
+                  }}
+                />
+              </div>
+              <div className="card card-body dash-card p-4 mt-4">
                 <h4 className="text-center">Module Commands</h4>
                 <div className="form-check form-switch ps-0 ms-1">
                   <input className="form-check-input ms-auto mt-1" type="checkbox" checked={chatbotCommand || data.commands.chatbot} id="chatbotCommand" name="chatbotCommand" onChange={handleChange} />

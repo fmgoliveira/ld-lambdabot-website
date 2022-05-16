@@ -19,6 +19,7 @@ export async function getAdministrationSettings(guildId: string | undefined) {
 
 export async function postAdministrationSettings(guildId: string | undefined, data: {
   settings: {
+    staffRoles: string[];
     chatbot: {
       enabled: boolean;
       channels: string[];

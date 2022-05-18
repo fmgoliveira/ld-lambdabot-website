@@ -550,19 +550,19 @@ export const ManageModerationPage = ({ user }: { user: User }) => {
                 <h4 className="text-center">Module Commands</h4>
                 <div className="form-check form-switch ps-0 ms-1">
                   <input className="form-check-input ms-auto mt-1" type="checkbox" checked={banCommand || data.moderation.commands.ban} id="banCommand" name="banCommand" onChange={handleChange} />
-                  <label className="form-check-label ms-3 text-light" htmlFor="banCommand">Ban a member <br /> <code>/ban &lt;user&gt; [reason]</code></label>
+                  <label className="form-check-label ms-3 text-light" htmlFor="banCommand">Ban a member <br /> <code>/ban &lt;target&gt; [reason] [time]</code></label>
                 </div>
                 <div className="form-check form-switch ps-0 ms-1">
                   <input className="form-check-input ms-auto mt-1" type="checkbox" checked={kickCommand || data.moderation.commands.kick} id="kickCommand" name="kickCommand" onChange={handleChange} />
-                  <label className="form-check-label ms-3 text-light" htmlFor="kickCommand">Kick a member <br /> <code>/kick &lt;user&gt; [reason]</code></label>
+                  <label className="form-check-label ms-3 text-light" htmlFor="kickCommand">Kick a member <br /> <code>/kick &lt;target&gt; [reason]</code></label>
                 </div>
                 <div className="form-check form-switch ps-0 ms-1">
                   <input className="form-check-input ms-auto mt-1" type="checkbox" checked={warnCommand || data.moderation.commands.warn} id="warnCommand" name="warnCommand" onChange={handleChange} />
-                  <label className="form-check-label ms-3 text-light" htmlFor="warnCommand">Warn a member <br /> <code>/warn &lt;user&gt; [reason]</code></label>
+                  <label className="form-check-label ms-3 text-light" htmlFor="warnCommand">Warn a member <br /> <code>/warn &lt;target&gt; [reason]</code></label>
                 </div>
                 <div className="form-check form-switch ps-0 ms-1">
                   <input className="form-check-input ms-auto mt-1" type="checkbox" checked={timeoutCommand || data.moderation.commands.timeout} id="timeoutCommand" name="timeoutCommand" onChange={handleChange} />
-                  <label className="form-check-label ms-3 text-light" htmlFor="timeoutCommand">Timeout a member <br /> <code>/timeout &lt;user&gt; &lt;duration&gt; [reason]</code></label>
+                  <label className="form-check-label ms-3 text-light" htmlFor="timeoutCommand">Timeout a member <br /> <code>/timeout &lt;target&gt; &lt;duration&gt; [reason]</code></label>
                 </div>
                 <div className="form-check form-switch ps-0 ms-1">
                   <input className="form-check-input ms-auto mt-1" type="checkbox" checked={clearCommand || data.moderation.commands.clear} id="clearCommand" name="clearCommand" onChange={handleChange} />
@@ -570,11 +570,11 @@ export const ManageModerationPage = ({ user }: { user: User }) => {
                 </div>
                 <div className="form-check form-switch ps-0 ms-1">
                   <input className="form-check-input ms-auto mt-1" type="checkbox" checked={warningsCommand || data.moderation.commands.warnings} id="warningsCommand" name="warningsCommand" onChange={handleChange} />
-                  <label className="form-check-label ms-3 text-light" htmlFor="warningsCommand">Check a member's warnings <br /> <code>/warnings &lt;user&gt;</code></label>
+                  <label className="form-check-label ms-3 text-light" htmlFor="warningsCommand">Check a member's warnings <br /> <code>/warnings &lt;target&gt;</code></label>
                 </div>
                 <div className="form-check form-switch ps-0 ms-1">
                   <input className="form-check-input ms-auto mt-1" type="checkbox" checked={clearwarnsCommand || data.moderation.commands.clearwarns} id="clearwarnsCommand" name="clearwarnsCommand" onChange={handleChange} />
-                  <label className="form-check-label ms-3 text-light" htmlFor="clearwarnsCommand">Clear a member's warnings <br /> <code>/clearwarns &lt;user&gt;</code></label>
+                  <label className="form-check-label ms-3 text-light" htmlFor="clearwarnsCommand">Clear a member's warnings <br /> <code>/clearwarns &lt;target&gt;</code></label>
                 </div>
                 <div className="form-check form-switch ps-0 ms-1">
                   <input className="form-check-input ms-auto mt-1" type="checkbox" checked={slowmodeCommand || data.moderation.commands.slowmode} id="slowmodeCommand" name="slowmodeCommand" onChange={handleChange} />

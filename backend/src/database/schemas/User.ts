@@ -57,11 +57,13 @@ const UserSchema = new Schema<User>({
 
   accessToken: {
     type: mongoose.SchemaTypes.String,
-    required: true,
+    required: false,
+    default: "",
   },
   refreshToken: {
     type: mongoose.SchemaTypes.String,
-    required: true,
+    required: false,
+    default: "",
   }
 });
 

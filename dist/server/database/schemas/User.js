@@ -38,11 +38,13 @@ const UserSchema = new mongoose_1.Schema({
     },
     accessToken: {
         type: mongoose_1.default.SchemaTypes.String,
-        required: true,
+        required: false,
+        default: "",
     },
     refreshToken: {
         type: mongoose_1.default.SchemaTypes.String,
-        required: true,
+        required: false,
+        default: "",
     }
 });
 exports.default = mongoose_1.default.model('users', UserSchema);

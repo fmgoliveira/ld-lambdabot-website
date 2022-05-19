@@ -5,7 +5,7 @@ export const Footer = () => <footer className="container footer position-fixed-b
         <div className=" row">
             <div className="col-md-5 mb-4 ms-auto">
                 <div>
-                    <a href="https://www.creative-tim.com/product/material-kit">
+                    <a href="https://test.lambdadev.xyz">
                         <img src={logo} className="mb-3 footer-logo" alt="main_logo" />
                     </a>
                     <h5 className="font-weight-bolder">Lambda Bot</h5>

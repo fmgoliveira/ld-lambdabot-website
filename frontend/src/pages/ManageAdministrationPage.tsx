@@ -416,7 +416,7 @@ export const ManageAdministrationPage = ({ user }: { user: User }) => {
               <div className="card card-body dash-card p-4">
                 <h4 className="text-center">Staff Roles</h4>
                 <div className="ps-0 ms-1">
-                  <small>The roles that are allowed to use staff only commands, such as <code>/giveaway</code>, <code>/verify [user]</code>, <code>/xp &lt;add|remove|set&gt;</code></small>
+                  <small>The roles that are allowed to use staff only commands, such as <code>/giveaway</code>, <code>/verify [user]</code>, <code>/xp &lt;give|remove|set&gt;</code></small>
                 </div>
                 <label htmlFor="staffRoles" className="text-light mt-3">Staff Roles</label>
                 <Select

@@ -35,7 +35,7 @@ export default async (client: Client) => {
         user: members.get(member.userId),
       });
     });
-    if (votedInfinityBots) votedTopGG.forEach((member) => {
+    if (votedInfinityBots) votedInfinityBots.forEach((member) => {
       if (!votedMembers.has(member.userId)) votedMembers.set(member.userId, {
         user: members.get(member.userId),
       });

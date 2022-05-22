@@ -39,7 +39,7 @@ exports.default = async (client) => {
                     });
             });
         if (votedInfinityBots)
-            votedTopGG.forEach((member) => {
+            votedInfinityBots.forEach((member) => {
                 if (!votedMembers.has(member.userId))
                     votedMembers.set(member.userId, {
                         user: members.get(member.userId),

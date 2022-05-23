@@ -30,7 +30,6 @@ export const ManageWelcomePage = ({ user }: { user: User }) => {
   const [welcomeEmbedAuthorName, setWelcomeEmbedAuthorName] = useState()
   const [welcomeEmbedAuthorIcon, setWelcomeEmbedAuthorIcon] = useState()
   const [welcomeEmbedAuthorUrl, setWelcomeEmbedAuthorUrl] = useState()
-  const [welcomeEmbedTimestamp, setWelcomeEmbedTimestamp] = useState()
 
   const [leaveEnabled, setLeaveEnabled] = useState()
   const [leaveDM, setLeaveDM] = useState()
@@ -47,7 +46,6 @@ export const ManageWelcomePage = ({ user }: { user: User }) => {
   const [leaveEmbedAuthorName, setLeaveEmbedAuthorName] = useState()
   const [leaveEmbedAuthorIcon, setLeaveEmbedAuthorIcon] = useState()
   const [leaveEmbedAuthorUrl, setLeaveEmbedAuthorUrl] = useState()
-  const [leaveEmbedTimestamp, setLeaveEmbedTimestamp] = useState()
 
   const [autorolesEnabled, setAutorolesEnabled] = useState()
 
@@ -124,10 +122,6 @@ export const ManageWelcomePage = ({ user }: { user: User }) => {
         data.welcome.settings.embed.author.url = value
         setWelcomeEmbedAuthorUrl(value)
         break
-      case 'welcomeEmbedTimestamp':
-        data.welcome.settings.embed.timestamp = checked
-        setWelcomeEmbedTimestamp(checked)
-        break
 
       case 'leaveEnabled':
         data.leave.settings.enabled = checked
@@ -191,10 +185,6 @@ export const ManageWelcomePage = ({ user }: { user: User }) => {
       case 'leaveEmbedAuthorUrl':
         data.leave.settings.embed.author.url = value
         setLeaveEmbedAuthorUrl(value)
-        break
-      case 'leaveEmbedTimestamp':
-        data.leave.settings.embed.timestamp = checked
-        setLeaveEmbedTimestamp(checked)
         break
 
       case 'autorolesEnabled':
@@ -389,14 +379,7 @@ export const ManageWelcomePage = ({ user }: { user: User }) => {
                         <input type='color' className="form-control ms-auto text-white cursor-pointer" value={welcomeEmbedColor || data.welcome.settings.embed.color} id="welcomeEmbedColor" name="welcomeEmbedColor" onChange={handleChange} />
                       </div>
                     </div>
-                    <div className="col-8">
-                      <div className="input-group input-group-static ps-0 ms-1">
-                        <div className="form-check form-switch ps-0 ms-1">
-                          <input className="form-check-input ms-auto mt-1" type="checkbox" checked={welcomeEmbedTimestamp || data.welcome.settings.embed.timestamp} id="welcomeEmbedTimestamp" name="welcomeEmbedTimestamp" onChange={handleChange} />
-                          <label className="form-check-label ms-3 text-light" htmlFor="welcomeEmbedTimestamp">Show Timestamp in Embed</label>
-                        </div>
-                      </div>
-                    </div>
+                    <div className="col-8"></div>
                   </div>
                   <button className="btn btn-primary btn-sm mt-4" onClick={handleSaveWelcome}>Save</button>
                 </div>
@@ -544,12 +527,6 @@ export const ManageWelcomePage = ({ user }: { user: User }) => {
                       </div>
                     </div>
                     <div className="col-8">
-                      <div className="input-group input-group-static ps-0 ms-1">
-                        <div className="form-check form-switch ps-0 ms-1">
-                          <input className="form-check-input ms-auto mt-1" type="checkbox" checked={leaveEmbedTimestamp || data.leave.settings.embed.timestamp} id="leaveEmbedTimestamp" name="leaveEmbedTimestamp" onChange={handleChange} />
-                          <label className="form-check-label ms-3 text-light" htmlFor="leaveEmbedTimestamp">Show Timestamp in Embed</label>
-                        </div>
-                      </div>
                     </div>
                   </div>
                   <button className="btn btn-primary btn-sm mt-4" onClick={handleSaveLeave}>Save</button>
@@ -654,8 +631,8 @@ export const ManageWelcomePage = ({ user }: { user: User }) => {
             </div>
           </div>
         </div>
-      </section>
+      </section >
       <Footer />
-    </div>
+    </div >
   )
 }

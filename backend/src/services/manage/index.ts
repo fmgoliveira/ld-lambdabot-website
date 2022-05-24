@@ -120,7 +120,7 @@ export async function postWelcomeSettings(guildId: string | undefined, data: {
 
   const embed = validEmbed(data.settings.embed);
   if (embed.error) return { error: embed.error };
-  if (data.settings.enabled && !data.settings.channel) return { error: "You must specify a channel." };
+  if (data.settings.enabled && !data.settings.dm && !data.settings.channel) return { error: "You must specify a channel." };
   if (!data.settings.message && !data.settings.embed.enabled) return { error: "You must specify a message or an embed." };
 
   if (data.settings.enabled) {
@@ -167,7 +167,7 @@ export async function postLeaveSettings(guildId: string | undefined, data: {
 
   const embed = validEmbed(data.settings.embed);
   if (embed.error) return { error: embed.error };
-  if (data.settings.enabled && !data.settings.channel) return { error: "You must specify a channel." };
+  if (data.settings.enabled && !data.settings.dm && !data.settings.channel) return { error: "You must specify a channel." };
   if (!data.settings.message && !data.settings.embed.enabled) return { error: "You must specify a message or an embed." };
 
   if (data.settings.enabled) {

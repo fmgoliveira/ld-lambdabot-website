@@ -352,39 +352,45 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
       moveToClosedCategory: c.moveToClosedCategory,
     }));
 
-    data.settings.categories.forEach((category) => {
-      const botHasPermissionsInCategoryChannel: 0 | 1 | 2 = checkForBotPermissionInCategory(category.categoryChannel, "MANAGE_CHANNELS");
-      if (botHasPermissionsInCategoryChannel === 0) return { error: "The category channel you specified is not valid." };
-      if (botHasPermissionsInCategoryChannel === 1) return { error: "The bot does not have permission to manage channels in the category channel you specified." };
+    const catArray: { label: string, value: string} = [];
 
-      if (category.welcomeMessage.message.length > 4096) return { error: "The welcome message you specified is too long." };
-      if (category.welcomeMessage.message.length < 1) return { error: "The welcome message you specified is too short." };
+    if (data.settings.categories !== prevTicketCategories) {
+      data.settings.categories.forEach((category) => {
+        const botHasPermissionsInCategoryChannel: 0 | 1 | 2 = checkForBotPermissionInCategory(category.categoryChannel, "MANAGE_CHANNELS");
+        if (botHasPermissionsInCategoryChannel === 0) return { error: "The category channel you specified is not valid." };
+        if (botHasPermissionsInCategoryChannel === 1) return { error: "The bot does not have permission to manage channels in the category channel you specified." };
 
-      if (category.label.length > 80) return { error: "The label you specified is too long. It can have a maximum of 80 characters." };
-      if (category.label.length < 1) return { error: "The label you specified is too short." };
-    });
+        if (category.welcomeMessage.message.length > 4096) return { error: "The welcome message you specified is too long." };
+        if (category.welcomeMessage.message.length < 1) return { error: "The welcome message you specified is too short." };
 
-    const dataToDelete = await TicketCategory.find({ guildId });
-    dataToDelete.forEach(async (c) => {
-      await c.delete();
-    });
-
-    data.settings.categories.forEach(async (category) => {
-      await TicketCategory.create({
-        id: uuidv4().substring(0, 100),
-        guildId,
-        categoryChannel: category.categoryChannel,
-        label: category.label,
-        maxTickets: category.maxTickets,
-        supportRoles: category.supportRoles,
-        welcomeMessage: {
-          message: category.welcomeMessage.message,
-          color: category.welcomeMessage.color,
-        },
-        deleteOnClose: category.deleteOnClose,
-        moveToClosedCategory: category.moveToClosedCategory,
+        if (category.label.length > 80) return { error: "The label you specified is too long. It can have a maximum of 80 characters." };
+        if (category.label.length < 1) return { error: "The label you specified is too short." };
       });
-    });
+
+      const dataToDelete = await TicketCategory.find({ guildId });
+      dataToDelete.forEach(async (c) => {
+        await c.delete();
+      });
+
+      data.settings.categories.forEach(async (category) => {
+        await TicketCategory.create({
+          id: uuidv4().substring(0, 100),
+          guildId,
+          categoryChannel: category.categoryChannel,
+          label: category.label,
+          maxTickets: category.maxTickets,
+          supportRoles: category.supportRoles,
+          welcomeMessage: {
+            message: category.welcomeMessage.message,
+            color: category.welcomeMessage.color,
+          },
+          deleteOnClose: category.deleteOnClose,
+          moveToClosedCategory: category.moveToClosedCategory,
+        }).then((doc) => {
+          catArray.push({ label: doc.label, value: doc.id });
+        });
+      });
+    }
 
     if (data.updatePanelMessage || data.settings.categories !== prevTicketCategories) {
       const prevData = guild.modules.tickets;
@@ -407,7 +413,7 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
           new MessageSelectMenu()
             .setCustomId('ticket-create')
             .setPlaceholder('Select a Ticket Category')
-            .addOptions((await TicketCategory.find({ guildId })).map((category) => ({ label: category.label, value: category.id }))),
+            .addOptions(catArray),
         );
 
         const prevChannel = client.channels.cache.get(prevData.panelMessage.channel);

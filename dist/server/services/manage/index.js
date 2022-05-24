@@ -238,41 +238,46 @@ async function postTicketsSettings(guildId, data) {
             deleteOnClose: c.deleteOnClose,
             moveToClosedCategory: c.moveToClosedCategory,
         }));
-        data.settings.categories.forEach((category) => {
-            const botHasPermissionsInCategoryChannel = (0, methods_1.checkForBotPermissionInCategory)(category.categoryChannel, "MANAGE_CHANNELS");
-            if (botHasPermissionsInCategoryChannel === 0)
-                return { error: "The category channel you specified is not valid." };
-            if (botHasPermissionsInCategoryChannel === 1)
-                return { error: "The bot does not have permission to manage channels in the category channel you specified." };
-            if (category.welcomeMessage.message.length > 4096)
-                return { error: "The welcome message you specified is too long." };
-            if (category.welcomeMessage.message.length < 1)
-                return { error: "The welcome message you specified is too short." };
-            if (category.label.length > 80)
-                return { error: "The label you specified is too long. It can have a maximum of 80 characters." };
-            if (category.label.length < 1)
-                return { error: "The label you specified is too short." };
-        });
-        const dataToDelete = await schemas_1.TicketCategory.find({ guildId });
-        dataToDelete.forEach(async (c) => {
-            await c.delete();
-        });
-        data.settings.categories.forEach(async (category) => {
-            await schemas_1.TicketCategory.create({
-                id: (0, uuid_1.v4)().substring(0, 100),
-                guildId,
-                categoryChannel: category.categoryChannel,
-                label: category.label,
-                maxTickets: category.maxTickets,
-                supportRoles: category.supportRoles,
-                welcomeMessage: {
-                    message: category.welcomeMessage.message,
-                    color: category.welcomeMessage.color,
-                },
-                deleteOnClose: category.deleteOnClose,
-                moveToClosedCategory: category.moveToClosedCategory,
+        const catArray = [];
+        if (data.settings.categories !== prevTicketCategories) {
+            data.settings.categories.forEach((category) => {
+                const botHasPermissionsInCategoryChannel = (0, methods_1.checkForBotPermissionInCategory)(category.categoryChannel, "MANAGE_CHANNELS");
+                if (botHasPermissionsInCategoryChannel === 0)
+                    return { error: "The category channel you specified is not valid." };
+                if (botHasPermissionsInCategoryChannel === 1)
+                    return { error: "The bot does not have permission to manage channels in the category channel you specified." };
+                if (category.welcomeMessage.message.length > 4096)
+                    return { error: "The welcome message you specified is too long." };
+                if (category.welcomeMessage.message.length < 1)
+                    return { error: "The welcome message you specified is too short." };
+                if (category.label.length > 80)
+                    return { error: "The label you specified is too long. It can have a maximum of 80 characters." };
+                if (category.label.length < 1)
+                    return { error: "The label you specified is too short." };
             });
-        });
+            const dataToDelete = await schemas_1.TicketCategory.find({ guildId });
+            dataToDelete.forEach(async (c) => {
+                await c.delete();
+            });
+            data.settings.categories.forEach(async (category) => {
+                await schemas_1.TicketCategory.create({
+                    id: (0, uuid_1.v4)().substring(0, 100),
+                    guildId,
+                    categoryChannel: category.categoryChannel,
+                    label: category.label,
+                    maxTickets: category.maxTickets,
+                    supportRoles: category.supportRoles,
+                    welcomeMessage: {
+                        message: category.welcomeMessage.message,
+                        color: category.welcomeMessage.color,
+                    },
+                    deleteOnClose: category.deleteOnClose,
+                    moveToClosedCategory: category.moveToClosedCategory,
+                }).then((doc) => {
+                    catArray.push({ label: doc.label, value: doc.id });
+                });
+            });
+        }
         if (data.updatePanelMessage || data.settings.categories !== prevTicketCategories) {
             const prevData = guild.modules.tickets;
             const channel = client_1.client.channels.cache.get(data.settings.panelMessage.channel);
@@ -294,7 +299,7 @@ async function postTicketsSettings(guildId, data) {
                 const components = new discord_js_3.MessageActionRow().addComponents(new discord_js_1.MessageSelectMenu()
                     .setCustomId('ticket-create')
                     .setPlaceholder('Select a Ticket Category')
-                    .addOptions((await schemas_1.TicketCategory.find({ guildId })).map((category) => ({ label: category.label, value: category.id }))));
+                    .addOptions(catArray));
                 const prevChannel = client_1.client.channels.cache.get(prevData.panelMessage.channel);
                 if (prevChannel && (prevChannel.type === 'GUILD_NEWS' || prevChannel.type === 'GUILD_TEXT')) {
                     if (prevData.panelMessage.id) {

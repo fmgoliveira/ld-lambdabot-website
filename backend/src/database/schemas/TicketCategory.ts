@@ -1,6 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 
 export interface TicketCategory {
+  id: string;
   guildId: string;
 
   categoryChannel: string;
@@ -16,6 +17,8 @@ export interface TicketCategory {
 }
 
 const TicketCategorySchema = new Schema<TicketCategory>({
+  id: { type: String, required: true, unique: true },
+
   guildId: { type: String, required: true },
 
   categoryChannel: { type: String, required: false, default: '' },

@@ -10,6 +10,7 @@ const methods_1 = require("../../client/methods");
 const schemas_1 = require("../../database/schemas");
 const functions_1 = require("../../utils/functions");
 const placeholderReplace_1 = tslib_1.__importDefault(require("../../utils/placeholderReplace"));
+const uuid_1 = require("uuid");
 async function getAdministrationSettings(guildId) {
     const guild = await schemas_1.Guild.findOne({ guildId });
     if (!guild)
@@ -259,6 +260,7 @@ async function postTicketsSettings(guildId, data) {
             });
             data.settings.categories.forEach(async (category) => {
                 const newTicketCategory = new schemas_1.TicketCategory({
+                    id: (0, uuid_1.v4)(),
                     guildId,
                     categoryChannel: category.categoryChannel,
                     label: category.label,

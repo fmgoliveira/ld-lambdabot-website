@@ -6,6 +6,7 @@ import { checkForBotPermissionInCategory, checkForBotPermissionInChannel, checkF
 import { Guild, TicketCategory } from "../../database/schemas";
 import { createActionLog, validEmbed } from "../../utils/functions";
 import placeholderReplace from "../../utils/placeholderReplace";
+import { v4 as uuidv4 } from "uuid";
 
 export async function getAdministrationSettings(guildId: string | undefined) {
   const guild = await Guild.findOne({ guildId });
@@ -371,6 +372,7 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
 
       data.settings.categories.forEach(async (category) => {
         const newTicketCategory = new TicketCategory({
+          id: uuidv4(),
           guildId,
           categoryChannel: category.categoryChannel,
           label: category.label,

@@ -352,7 +352,7 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
       moveToClosedCategory: c.moveToClosedCategory,
     }));
 
-    const catArray: { label: string, value: string} = [];
+    const catArray: { label: string, value: string }[] = [];
 
     if (data.settings.categories !== prevTicketCategories) {
       data.settings.categories.forEach((category) => {

@@ -260,7 +260,7 @@ async function postTicketsSettings(guildId, data) {
             });
             data.settings.categories.forEach(async (category) => {
                 const newTicketCategory = new schemas_1.TicketCategory({
-                    id: (0, uuid_1.v4)(),
+                    id: (0, uuid_1.v4)().substring(0, 100),
                     guildId,
                     categoryChannel: category.categoryChannel,
                     label: category.label,
@@ -297,7 +297,7 @@ async function postTicketsSettings(guildId, data) {
                 const components = new discord_js_3.MessageActionRow().addComponents(new discord_js_1.MessageSelectMenu()
                     .setCustomId('ticket-create')
                     .setPlaceholder('Select a Ticket Category')
-                    .addOptions((await schemas_1.TicketCategory.find({ guildId })).map((category) => ({ label: category.label, value: String(category._id) }))));
+                    .addOptions((await schemas_1.TicketCategory.find({ guildId })).map((category) => ({ label: category.label, value: category.id }))));
                 const prevChannel = client_1.client.channels.cache.get(prevData.panelMessage.channel);
                 if (prevChannel && (prevChannel.type === 'GUILD_NEWS' || prevChannel.type === 'GUILD_TEXT')) {
                     if (prevData.panelMessage.id) {

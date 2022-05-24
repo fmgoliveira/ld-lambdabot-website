@@ -372,7 +372,7 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
 
       data.settings.categories.forEach(async (category) => {
         const newTicketCategory = new TicketCategory({
-          id: uuidv4(),
+          id: uuidv4().substring(0, 100),
           guildId,
           categoryChannel: category.categoryChannel,
           label: category.label,
@@ -411,7 +411,7 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
           new MessageSelectMenu()
             .setCustomId('ticket-create')
             .setPlaceholder('Select a Ticket Category')
-            .addOptions((await TicketCategory.find({ guildId })).map((category) => ({ label: category.label, value: String(category._id) }))),
+            .addOptions((await TicketCategory.find({ guildId })).map((category) => ({ label: category.label, value: category.id }))),
         );
 
         const prevChannel = client.channels.cache.get(prevData.panelMessage.channel);

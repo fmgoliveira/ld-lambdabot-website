@@ -259,9 +259,20 @@ async function postTicketsSettings(guildId, data) {
             dataToDelete.forEach(async (c) => {
                 await c.delete();
             });
+            const uuids = [];
+            const labels = [];
+            data.settings.categories.forEach((category) => {
+                const uuid = (0, uuid_1.v4)().substring(0, 100);
+                const label = category.label;
+                uuids.push(uuid);
+                labels.push(label);
+            });
+            uuids.forEach((uuid, index) => {
+                catArray.push({ label: labels[index], value: uuid });
+            });
             data.settings.categories.forEach(async (category) => {
                 await schemas_1.TicketCategory.create({
-                    id: (0, uuid_1.v4)().substring(0, 100),
+                    id: uuids[data.settings.categories.indexOf(category)],
                     guildId,
                     categoryChannel: category.categoryChannel,
                     label: category.label,
@@ -273,8 +284,6 @@ async function postTicketsSettings(guildId, data) {
                     },
                     deleteOnClose: category.deleteOnClose,
                     moveToClosedCategory: category.moveToClosedCategory,
-                }).then((doc) => {
-                    catArray.push({ label: doc.label, value: doc.id });
                 });
             });
         }

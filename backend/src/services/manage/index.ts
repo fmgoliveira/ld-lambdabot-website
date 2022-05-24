@@ -372,9 +372,22 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
         await c.delete();
       });
 
+      const uuids: string[] = [];
+      const labels: string[] = [];
+      data.settings.categories.forEach((category) => {
+        const uuid = uuidv4().substring(0, 100);
+        const label = category.label;
+        uuids.push(uuid);
+        labels.push(label);
+      });
+
+      uuids.forEach((uuid, index) => {
+        catArray.push({ label: labels[index], value: uuid });
+      });
+
       data.settings.categories.forEach(async (category) => {
         await TicketCategory.create({
-          id: uuidv4().substring(0, 100),
+          id: uuids[data.settings!.categories.indexOf(category)],
           guildId,
           categoryChannel: category.categoryChannel,
           label: category.label,
@@ -386,9 +399,7 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
           },
           deleteOnClose: category.deleteOnClose,
           moveToClosedCategory: category.moveToClosedCategory,
-        }).then((doc) => {
-          catArray.push({ label: doc.label, value: doc.id });
-        });
+        })
       });
     }
 

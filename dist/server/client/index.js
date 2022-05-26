@@ -6,6 +6,7 @@ const tslib_1 = require("tslib");
 const discord_js_1 = require("discord.js");
 const statsSystem_1 = tslib_1.__importDefault(require("./statsSystem"));
 const votingSystem_1 = tslib_1.__importDefault(require("./votingSystem"));
+const donatorSystem_1 = tslib_1.__importDefault(require("./donatorSystem"));
 // config();
 const client = new discord_js_1.Client({
     intents: 104447,
@@ -21,6 +22,8 @@ client.once('ready', () => {
     console.log('Voting System started.');
     (0, statsSystem_1.default)(client);
     console.log('Post Stats System started.');
+    (0, donatorSystem_1.default)(client);
+    console.log('Donator System started.');
 });
 exports.default = {
     client,

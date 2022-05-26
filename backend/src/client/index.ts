@@ -2,6 +2,7 @@
 import { Client } from 'discord.js';
 import statsSystem from './statsSystem';
 import votingSystem from './votingSystem';
+import donatorSystem from './donatorSystem';
 
 // config();
 const client = new Client({
@@ -18,6 +19,8 @@ client.once('ready', () => {
   console.log('Voting System started.');
   statsSystem(client);
   console.log('Post Stats System started.');
+  donatorSystem(client);
+  console.log('Donator System started.');
 });
 
 export { client };

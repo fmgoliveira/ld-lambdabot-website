@@ -13,6 +13,7 @@ export interface User {
   acceptedPolicy: boolean;
 
   voted: boolean;
+  premium: boolean;
 
   accessToken: string;
   refreshToken: string;
@@ -51,6 +52,10 @@ const UserSchema = new Schema<User>({
   },
 
   voted: {
+    type: mongoose.SchemaTypes.Boolean,
+    default: false,
+  },
+  premium: {
     type: mongoose.SchemaTypes.Boolean,
     default: false,
   },

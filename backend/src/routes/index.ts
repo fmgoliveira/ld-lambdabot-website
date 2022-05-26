@@ -5,6 +5,7 @@ import inviteRouter from './invite';
 import insightsRouter from './insights';
 import manageRouter from './manage';
 import votingRouter from './voting';
+import donatingRouter from './donating';
 import botRouter from './bot';
 
 const router = Router();
@@ -15,6 +16,7 @@ router.use('/invite', inviteRouter);
 router.use('/insights', insightsRouter);
 router.use('/manage', manageRouter);
 router.use('/voting', votingRouter);
+router.use('/donating', donatingRouter);
 router.use('/bot', botRouter)
 
 export default router;

@@ -14,6 +14,7 @@ export interface User {
 
   voted: boolean;
   premium: boolean;
+  donator: boolean;
 
   accessToken: string;
   refreshToken: string;
@@ -59,6 +60,10 @@ const UserSchema = new Schema<User>({
     type: mongoose.SchemaTypes.Boolean,
     default: false,
   },
+  donator: {
+    type: mongoose.SchemaTypes.Boolean,
+    default: false,
+  }
 
   accessToken: {
     type: mongoose.SchemaTypes.String,

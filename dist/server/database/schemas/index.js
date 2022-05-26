@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TicketCategory = exports.Vote = exports.Logs = exports.Guild = exports.User = void 0;
+exports.Donator = exports.TicketCategory = exports.Vote = exports.Logs = exports.Guild = exports.User = void 0;
 const tslib_1 = require("tslib");
 const User_1 = tslib_1.__importDefault(require("./User"));
 exports.User = User_1.default;
@@ -12,3 +12,5 @@ const Vote_1 = tslib_1.__importDefault(require("./Vote"));
 exports.Vote = Vote_1.default;
 const TicketCategory_1 = tslib_1.__importDefault(require("./TicketCategory"));
 exports.TicketCategory = TicketCategory_1.default;
+const Donator_1 = tslib_1.__importDefault(require("./Donator"));
+exports.Donator = Donator_1.default;

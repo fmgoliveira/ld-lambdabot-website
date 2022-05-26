@@ -23,6 +23,9 @@ declare global {
       TOP_GG_WEBHOOK_TOKEN: string;
       INFINITY_BOTS_WEBHOOK_TOKEN: string;
       VOTED_ROLE: string;
+      PREMIUM_ROLE: string;
+      DONATOR_ROLE: string;
+      DONATING_WEBHOOK_TOKEN: string;
     }
 }
 }

@@ -94,7 +94,7 @@ exports.default = async (client) => {
             firstEmbed.setFooter({ text: "You can be here too: just upvote the bot!" });
             var string = "";
             votedArray.slice(0, 40).forEach((member) => {
-                string += `• **${member.user.tag}** is now a <:voter:970246841973243964> <@&919936171717591061>\n`;
+                string += `• **${member.user.tag}** is now a <@&919936171717591061>\n`;
             });
             firstEmbed.setDescription(string);
             embeds.push(firstEmbed);
@@ -103,7 +103,7 @@ exports.default = async (client) => {
         if (votedArray.length > 40) {
             var string = "";
             votedArray.slice(40, 80).forEach((member) => {
-                string += `• **${member.user.tag}** is now a <:voter:970246841973243964> <@&919936171717591061>\n`;
+                string += `• **${member.user.tag}** is now a <@&919936171717591061>\n`;
             });
             embed2.setDescription(string);
             embeds.push(embed2);
@@ -112,7 +112,7 @@ exports.default = async (client) => {
         if (votedArray.length > 80) {
             var string = "";
             votedArray.slice(80, 120).forEach((member) => {
-                string += `• **${member.user.tag}** is now a <:voter:970246841973243964> <@&919936171717591061>\n`;
+                string += `• **${member.user.tag}** is now a <@&919936171717591061>\n`;
             });
             embed3.setDescription(string);
             embeds.push(embed3);
@@ -121,7 +121,7 @@ exports.default = async (client) => {
         if (votedArray.length > 120) {
             var string = "";
             votedArray.slice(120, 160).forEach((member) => {
-                string += `• **${member.user.tag}** is now a <:voter:970246841973243964> <@&919936171717591061>\n`;
+                string += `• **${member.user.tag}** is now a <@&919936171717591061>\n`;
             });
             embed4.setDescription(string);
             embeds.push(embed4);
@@ -129,7 +129,7 @@ exports.default = async (client) => {
         if (votedArray.length > 160) {
             var string = "";
             votedArray.slice(160, 200).forEach((member) => {
-                string += `• **${member.user.tag}** is now a <:voter:970246841973243964> <@&919936171717591061>\n`;
+                string += `• **${member.user.tag}** is now a <@&919936171717591061>\n`;
             });
             embed5.setDescription(string);
             embeds.push(embed5);
@@ -137,7 +137,7 @@ exports.default = async (client) => {
         if (votedArray.length > 200) {
             var string = "";
             votedArray.slice(200, 240).forEach((member) => {
-                string += `• **${member.user.tag}** is now a <:voter:970246841973243964> <@&919936171717591061>\n`;
+                string += `• **${member.user.tag}** is now a <@&919936171717591061>\n`;
             });
             embed6.setDescription(string);
             embeds.push(embed6);
@@ -145,7 +145,7 @@ exports.default = async (client) => {
         if (votedArray.length > 240) {
             var string = "";
             votedArray.slice(240, 280).forEach((member) => {
-                string += `• **${member.user.tag}** is now a <:voter:970246841973243964> <@&919936171717591061>\n`;
+                string += `• **${member.user.tag}** is now a <@&919936171717591061>\n`;
             });
             embed7.setDescription(string);
             embeds.push(embed7);
@@ -153,7 +153,7 @@ exports.default = async (client) => {
         if (votedArray.length > 280) {
             var string = "";
             votedArray.slice(280, 320).forEach((member) => {
-                string += `• **${member.user.tag}** is now a <:voter:970246841973243964> <@&919936171717591061>\n`;
+                string += `• **${member.user.tag}** is now a <@&919936171717591061>\n`;
             });
             embed8.setDescription(string);
             embeds.push(embed8);
@@ -161,7 +161,7 @@ exports.default = async (client) => {
         if (votedArray.length > 320) {
             var string = "";
             votedArray.slice(320, 360).forEach((member) => {
-                string += `• **${member.user.tag}** is now a <:voter:970246841973243964> <@&919936171717591061>\n`;
+                string += `• **${member.user.tag}** is now a <@&919936171717591061>\n`;
             });
             embed9.setDescription(string);
             embeds.push(embed9);
@@ -169,7 +169,7 @@ exports.default = async (client) => {
         if (votedArray.length > 360) {
             var string = "";
             votedArray.slice(360, 400).forEach((member) => {
-                string += `• **${member.user.tag}** is now a <:voter:970246841973243964> <@&919936171717591061>\n`;
+                string += `• **${member.user.tag}** is now a <@&919936171717591061>\n`;
             });
             lastEmbed.setDescription(string);
             embeds.push(lastEmbed);
@@ -182,10 +182,10 @@ exports.default = async (client) => {
     });
     const updateDatabase = async (votedMembers) => {
         const votedDb = await schemas_1.User.find({ voted: true });
-        votedDb.forEach((user) => {
+        votedDb.forEach(async (user) => {
             if (!votedMembers.has(user.discordId)) {
                 user.voted = false;
-                user.save();
+                await user.save();
             }
             ;
         });

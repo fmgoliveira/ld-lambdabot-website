@@ -36,6 +36,10 @@ const UserSchema = new mongoose_1.Schema({
         type: mongoose_1.default.SchemaTypes.Boolean,
         default: false,
     },
+    premium: {
+        type: mongoose_1.default.SchemaTypes.Boolean,
+        default: false,
+    },
     accessToken: {
         type: mongoose_1.default.SchemaTypes.String,
         required: false,

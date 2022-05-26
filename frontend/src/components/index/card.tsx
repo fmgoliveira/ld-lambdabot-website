@@ -97,10 +97,26 @@ export const Card = () => {
                                     <div className="info">
                                         <i className="material-icons text-gradient text-primary text-3xl">schedule</i>
                                         <h5 className="font-weight-bolder mt-3">Uptime Guarantee</h5>
-                                        <p className="pe-3">We guarantee you at least 96% of uptime for the bot in test/beta mode and 99.99% in production mode.</p>
+                                        <p className="pe-3">We guarantee you at 99% of uptime for the bot in test/beta mode and 99.99% in production mode.</p>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section className="my-5">
+                <div className="container text-2xl">
+                    <div className="d-flex align-items-center justify-content-center gap-4">
+                        <div className="w-40 w-xl-30 text-end">
+                            <b>Bot version 2.3.0</b>
+                        </div>
+                        <a href="https://youtube.com" target="_blank">
+                            <i className="material-icons text-9xl text-primary">play_circle_outline</i>
+                        </a>
+                        <div className="w-40 w-xl-30">
+                            Check teaser video
                         </div>
                     </div>
                 </div>
@@ -121,6 +137,7 @@ export const Card = () => {
                         p="Don't worry about the configuration, with our dashboard it's easy to setup and configure the bot."
                         img={dashImg}
                         dash
+                        invert
                     />
 
                     <Feature
@@ -128,7 +145,6 @@ export const Card = () => {
                         whiteH3="& Misfunctions"
                         p="Our bot doesn't have issues because you can report every bug you find, and we will fix it as soon as possible."
                         img={bugsImg}
-                        invert
                     />
                 </div>
             </section >

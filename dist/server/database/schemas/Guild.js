@@ -5,7 +5,7 @@ const mongoose_1 = tslib_1.__importStar(require("mongoose"));
 const GuildSchema = new mongoose_1.Schema({
     guildId: { type: String, required: true },
     guildName: { type: String, required: true },
-    guildIcon: { type: String, required: true },
+    guildIcon: { type: String, required: false },
     guildOwner: { type: String, required: true },
     modules: {
         administration: {

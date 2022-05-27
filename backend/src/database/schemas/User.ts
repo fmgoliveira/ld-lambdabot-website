@@ -63,7 +63,7 @@ const UserSchema = new Schema<User>({
   donator: {
     type: mongoose.SchemaTypes.Boolean,
     default: false,
-  }
+  },
 
   accessToken: {
     type: mongoose.SchemaTypes.String,

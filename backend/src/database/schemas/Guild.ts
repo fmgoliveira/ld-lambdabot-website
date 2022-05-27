@@ -279,7 +279,7 @@ export interface Guild {
 const GuildSchema = new Schema<Guild>({
   guildId: { type: String, required: true },
   guildName: { type: String, required: true },
-  guildIcon: { type: String, required: true },
+  guildIcon: { type: String, required: false },
   guildOwner: { type: String, required: true },
 
   modules: {

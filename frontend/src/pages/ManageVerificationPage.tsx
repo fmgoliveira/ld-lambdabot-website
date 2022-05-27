@@ -114,7 +114,7 @@ export const ManageVerificationPage = ({ user }: { user: User }) => {
         break
       
       case 'verifyCommand':
-        data.settings.command.verify = checked
+        data.commands.verify = checked
         setVerificationCommand(checked)
         postModuleSettings(guildId, 'verification', data, Store)
         break

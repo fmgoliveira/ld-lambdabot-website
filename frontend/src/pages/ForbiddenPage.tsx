@@ -88,7 +88,7 @@ export const ForbiddenPage = () => <div>
         <p className='text-center'>Unauthorised: You don't have access to this page. Login to access it.</p>
         <div className='row'>
             <div className='col-12 d-flex align-items-center justify-content-center'>
-                <div className="btn btn-icon bg-gradient-primary mb-0 me-1 mt-2 mt-md-0" onClick={() => window.location.href = `https://test.lambdadev.xyz/api/auth/login`}>
+                <div className="btn btn-icon bg-gradient-primary mb-0 me-1 mt-2 mt-md-0" onClick={() => window.location.href = `https://bot.lambdadev.xyz/api/auth/login`}>
                     <div className="d-flex align-items-center">
                         Login
                         <i className="material-icons ms-2" aria-hidden="true">login</i>

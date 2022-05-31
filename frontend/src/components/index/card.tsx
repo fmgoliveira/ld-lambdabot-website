@@ -112,7 +112,7 @@ export const Card = () => {
                         <div className="w-40 w-xl-30 text-end">
                             <b>Bot version 2.3.0</b>
                         </div>
-                        <a href="https://youtube.com" target="_blank">
+                        <a href="https://youtu.be/qAqHTEOePWg" target="_blank">
                             <i className="material-icons text-9xl text-primary">play_circle_outline</i>
                         </a>
                         <div className="w-40 w-xl-30">

@@ -4,7 +4,7 @@ export const Invite = ({ guildId, redirectUrl }: { guildId?: string, redirectUrl
   if (guildId && guildId !== "") {
     if (redirectUrl && redirectUrl !== "") switch (redirectUrl) {
       case "api_invite":
-        window.location.replace(`https://discord.com/oauth2/authorize?client_id=900398063607242762&permissions=1118741982327&redirect_uri=${encodeURIComponent(`https://test.lambdadev.xyz/api/invite/redirect`)
+        window.location.replace(`https://discord.com/oauth2/authorize?client_id=900398063607242762&permissions=1118741982327&redirect_uri=${encodeURIComponent(`https://bot.lambdadev.xyz/api/invite/redirect`)
           }& response_type=code & scope=bot % 20applications.commands & guild_id=${guildId} `)
         break
     }
@@ -39,12 +39,12 @@ export const Policy = () => {
 }
 
 export const Login = () => {
-  window.location.replace(`https://test.lambdadev.xyz/api/auth/login`)
+  window.location.replace(`https://bot.lambdadev.xyz/api/auth/login`)
   return <Spinner />
 }
 
 export const Logout = () => {
-  window.location.replace(`https://test.lambdadev.xyz/api/auth/logout`)
+  window.location.replace(`https://bot.lambdadev.xyz/api/auth/logout`)
   return <Spinner />
 }
 

@@ -394,7 +394,7 @@ export const ManageWelcomePage = ({ user }: { user: User }) => {
                 </div>
                 <div className="form-check form-switch ps-0 ms-1">
                   <input className="form-check-input ms-auto mt-1" type="checkbox" checked={leaveDM || data.leave.settings.dm} id="leaveDM" name="leaveDM" onChange={handleChange} />
-                  <label className="form-check-label ms-3 text-light" htmlFor="leaveDM">Send the message via DM on join</label>
+                  <label className="form-check-label ms-3 text-light" htmlFor="leaveDM">Send the message via DM on leave</label>
                 </div>
                 <label htmlFor="leaveChannel" className="text-light mt-3">Leave Channel</label>
                 <Select

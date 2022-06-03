@@ -210,7 +210,7 @@ async function postTicketsSettings(guildId, data) {
         }
         ;
         if (data.settings.closedCategory) {
-            const botHasPermissionsInClosedCategory = await (0, methods_1.checkForBotPermissionInCategory)(data.settings.logChannel, "MANAGE_CHANNELS");
+            const botHasPermissionsInClosedCategory = await (0, methods_1.checkForBotPermissionInCategory)(data.settings.closedCategory, "MANAGE_CHANNELS");
             if (botHasPermissionsInClosedCategory === 0)
                 return { error: "The closed category you specified is not valid." };
             if (botHasPermissionsInClosedCategory === 1)

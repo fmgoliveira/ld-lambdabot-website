@@ -328,7 +328,7 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
       if (botHasPermissionsInLogChannel === 1) return { error: "The bot does not have permission to send messages in the log channel you specified." };
     };
     if (data.settings.closedCategory) {
-      const botHasPermissionsInClosedCategory: 0 | 1 | 2 = await checkForBotPermissionInCategory(data.settings.logChannel, "MANAGE_CHANNELS");
+      const botHasPermissionsInClosedCategory: 0 | 1 | 2 = await checkForBotPermissionInCategory(data.settings.closedCategory, "MANAGE_CHANNELS");
       if (botHasPermissionsInClosedCategory === 0) return { error: "The closed category you specified is not valid." };
       if (botHasPermissionsInClosedCategory === 1) return { error: "The bot does not have permission to manage channels in the closed category you specified." };
     };

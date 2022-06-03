@@ -531,7 +531,7 @@ export const ManageTicketsPage = ({ user }: { user: User }) => {
                       moveToClosedCategory: boolean,
                     }, index: number) => {
                       return (
-                        <div className="modal fade" id={"modal" + ticketCategory.label.replaceAll(/\s/g, '_').replaceAll(new RegExp(/[^A-Za-z0-9\-\_]+/), '_')} tabIndex={-1} role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+                        <div className="modal fade" id={"modal" + ticketCategory.label.replaceAll(/\s/g, '_').replaceAll(new RegExp(/[^A-Za-z0-9\-\_]+/g), '_')} tabIndex={-1} role="dialog" aria-labelledby="modal-default" aria-hidden="true">
                           <div className="modal-dialog modal- modal-dialog-centered modal-" role="document">
                             <div className="modal-content">
                               <div className="modal-header">
@@ -672,7 +672,7 @@ export const ManageTicketsPage = ({ user }: { user: User }) => {
                       moveToClosedCategory: boolean,
                     }, index: number) => {
                       return (
-                        <div className="modal fade" id={"modal" + ticketCategory.label.replaceAll(/\s/g, '_').replaceAll(new RegExp(/[^A-Za-z0-9\-\_]+/), '_')} tabIndex={-1} role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+                        <div className="modal fade" id={"modal" + ticketCategory.label.replaceAll(/\s/g, '_').replaceAll(new RegExp(/[^A-Za-z0-9\-\_]+/g), '_')} tabIndex={-1} role="dialog" aria-labelledby="modal-default" aria-hidden="true">
                           <div className="modal-dialog modal- modal-dialog-centered modal-" role="document">
                             <div className="modal-content">
                               <div className="modal-header">
@@ -836,7 +836,7 @@ export const ManageTicketsPage = ({ user }: { user: User }) => {
                                 <td className='text-sm text-light'>{categories?.find(c => c.id === ticketCategory.categoryChannel)?.name || 'No Category'}</td>
                                 <td className='text-light text-center'>
                                   <Tooltip arrow placement='bottom' title="Edit">
-                                    <span className="material-icons-round text-sm text-light cursor-pointer" data-bs-toggle="modal" data-bs-target={"#modal" + ticketCategory.label.replaceAll(/\s/g, '_').replaceAll(new RegExp(/[^A-Za-z0-9\-\_]+/), '_')}>edit</span>
+                                    <span className="material-icons-round text-sm text-light cursor-pointer" data-bs-toggle="modal" data-bs-target={"#modal" + ticketCategory.label.replaceAll(/\s/g, '_').replaceAll(new RegExp(/[^A-Za-z0-9\-\_]+/g), '_')}>edit</span>
                                   </Tooltip>
                                 </td>
                                 <td className='text-light text-center'>
@@ -867,7 +867,7 @@ export const ManageTicketsPage = ({ user }: { user: User }) => {
                                 <td className='text-sm text-light'>{categories?.find(c => c.id === ticketCategory.categoryChannel)?.name || 'No Category'}</td>
                                 <td className='text-light text-center'>
                                   <Tooltip arrow placement='bottom' title="Edit">
-                                    <span className="material-icons-round text-sm text-light cursor-pointer" data-bs-toggle="modal" data-bs-target={"#modal" + ticketCategory.label.replaceAll(/\s/g, '_').replaceAll(new RegExp(/[^A-Za-z0-9\-\_]+/), '_')}>edit</span>
+                                    <span className="material-icons-round text-sm text-light cursor-pointer" data-bs-toggle="modal" data-bs-target={"#modal" + ticketCategory.label.replaceAll(/\s/g, '_').replaceAll(new RegExp(/[^A-Za-z0-9\-\_]+/g), '_')}>edit</span>
                                   </Tooltip>
                                 </td>
                                 <td className='text-light text-center'>

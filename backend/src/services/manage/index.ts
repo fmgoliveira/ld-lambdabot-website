@@ -2,7 +2,7 @@ import { MessageEmbed, MessageSelectMenu } from "discord.js";
 import { MessageButton } from "discord.js";
 import { MessageActionRow } from "discord.js";
 import { client } from "../../client";
-import { checkForBotPermissionInCategory, await checkForBotPermissionInChannel, checkForBotPermissionManageRole } from "../../client/methods";
+import { checkForBotPermissionInCategory, checkForBotPermissionInChannel, checkForBotPermissionManageRole } from "../../client/methods";
 import { Guild, TicketCategory } from "../../database/schemas";
 import { createActionLog, validEmbed } from "../../utils/functions";
 import placeholderReplace from "../../utils/placeholderReplace";
@@ -49,12 +49,12 @@ export async function postAdministrationSettings(guildId: string | undefined, da
   if (!data) return null;
 
   if (data.settings.chatbot.enabled) {
-    const errorArray = data.settings.chatbot.channels.map((channelId) => {
+    const errorArray = data.settings.chatbot.channels.map(async (channelId) => {
       const chatbotPerms = await checkForBotPermissionInChannel(channelId, "SEND_MESSAGES");
       if (chatbotPerms === 1) return true;
       else if (chatbotPerms === 2) return false;
     });
-    if (errorArray.some((error) => error === true)) return { error: "I don't have permission to send messages in at least one of the chatbot's specified channels." };
+    if (errorArray.some(async (error) => await error === true)) return { error: "I don't have permission to send messages in at least one of the chatbot's specified channels." };
   };
 
   data.settings.autoreact.forEach(async (autoreactObj) => {
@@ -355,7 +355,7 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
     const catArray: { label: string, value: string }[] = [];
 
     if (data.settings.categories !== prevTicketCategories) {
-      data.settings.categories.forEach((category) => {
+      data.settings.categories.forEach(async (category) => {
         const botHasPermissionsInCategoryChannel: 0 | 1 | 2 = await checkForBotPermissionInCategory(category.categoryChannel, "MANAGE_CHANNELS");
         if (botHasPermissionsInCategoryChannel === 0) return { error: "The category channel you specified is not valid." };
         if (botHasPermissionsInCategoryChannel === 1) return { error: "The bot does not have permission to manage channels in the category channel you specified." };

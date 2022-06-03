@@ -27,14 +27,14 @@ async function postAdministrationSettings(guildId, data) {
     if (!data)
         return null;
     if (data.settings.chatbot.enabled) {
-        const errorArray = data.settings.chatbot.channels.map((channelId) => {
+        const errorArray = data.settings.chatbot.channels.map(async (channelId) => {
             const chatbotPerms = await (0, methods_1.checkForBotPermissionInChannel)(channelId, "SEND_MESSAGES");
             if (chatbotPerms === 1)
                 return true;
             else if (chatbotPerms === 2)
                 return false;
         });
-        if (errorArray.some((error) => error === true))
+        if (errorArray.some(async (error) => await error === true))
             return { error: "I don't have permission to send messages in at least one of the chatbot's specified channels." };
     }
     ;
@@ -240,7 +240,7 @@ async function postTicketsSettings(guildId, data) {
         }));
         const catArray = [];
         if (data.settings.categories !== prevTicketCategories) {
-            data.settings.categories.forEach((category) => {
+            data.settings.categories.forEach(async (category) => {
                 const botHasPermissionsInCategoryChannel = await (0, methods_1.checkForBotPermissionInCategory)(category.categoryChannel, "MANAGE_CHANNELS");
                 if (botHasPermissionsInCategoryChannel === 0)
                     return { error: "The category channel you specified is not valid." };

@@ -38,6 +38,7 @@ export async function postAdministrationSettingsController(req: Request, res: Re
 
   const data = await postAdministrationSettings(guildId, req.body.data);
   if (data?.error) return res.status(400).send(data?.error);
+  if (!data?.guild || !data) return res.status(404).send({ msg: "Guild not found" });
 
   await createActionLog(guildId, req.user as User, "administration");
 
@@ -60,6 +61,7 @@ export async function postWelcomeSettingsController(req: Request, res: Response)
 
   const data = await postWelcomeSettings(guildId, req.body.data);
   if (data?.error) return res.status(400).send(data?.error);
+  if (!data?.guild || !data) return res.status(404).send({ msg: "Guild not found" });
 
   await createActionLog(guildId, req.user as User, "welcome");
 
@@ -72,6 +74,7 @@ export async function postLeaveSettingsController(req: Request, res: Response) {
 
   const data = await postLeaveSettings(guildId, req.body.data);
   if (data?.error) return res.status(400).send(data?.error);
+  if (!data?.guild || !data) return res.status(404).send({ msg: "Guild not found" });
 
   await createActionLog(guildId, req.user as User, "leave");
 
@@ -84,6 +87,7 @@ export async function postAutorolesSettingsController(req: Request, res: Respons
 
   const data = await postAutorolesSettings(guildId, req.body.data);
   if (data?.error) return res.status(400).send(data?.error);
+  if (!data?.guild || !data) return res.status(404).send({ msg: "Guild not found" });
 
   await createActionLog(guildId, req.user as User, "autoroles");
 
@@ -106,6 +110,7 @@ export async function postTicketsSettingsController(req: Request, res: Response)
 
   const data = await postTicketsSettings(guildId, req.body.data);
   if (data?.error) return res.status(400).send(data?.error);
+  if (!data?.guild || !data) return res.status(404).send({ msg: "Guild not found" });
 
   await createActionLog(guildId, req.user as User, "tickets");
 
@@ -130,6 +135,7 @@ export async function postModerationSettingsController(req: Request, res: Respon
 
   const data = await postModerationSettings(guildId, req.body.data);
   if (data?.error) return res.status(400).send(data?.error);
+  if (!data?.guild || !data) return res.status(404).send({ msg: "Guild not found" });
 
   res.status(200).send(data);
 }
@@ -140,6 +146,7 @@ export async function postAltDetectionSettingsController(req: Request, res: Resp
 
   const data = await postAltDetectionSettings(guildId, req.body.data);
   if (data?.error) return res.status(400).send(data?.error);
+  if (!data?.guild || !data) return res.status(404).send({ msg: "Guild not found" });
 
   res.status(200).send(data);
 }
@@ -162,6 +169,7 @@ export async function postLoggingSettingsController(req: Request, res: Response)
 
   const data = await postLoggingSettings(guildId, req.body.data);
   if (data?.error) return res.status(400).send(data?.error);
+  if (!data?.guild || !data) return res.status(404).send({ msg: "Guild not found" });
 
   res.status(200).send(data);
 }
@@ -172,6 +180,7 @@ export async function postChatFilterSettingsController(req: Request, res: Respon
 
   const data = await postChatFilterSettings(guildId, req.body.data);
   if (data?.error) return res.status(400).send(data?.error);
+  if (!data?.guild || !data) return res.status(404).send({ msg: "Guild not found" });
 
   res.status(200).send(data);
 }
@@ -192,6 +201,7 @@ export async function postVerificationSettingsController(req: Request, res: Resp
 
   const data = await postVerificationSettings(guildId, req.body.data);
   if (data?.error) return res.status(400).send(data?.error);
+  if (!data?.guild || !data) return res.status(404).send({ msg: "Guild not found" });
 
   await createActionLog(guildId, req.user as User, "verification");
 
@@ -214,6 +224,7 @@ export async function postLevelsSettingsController(req: Request, res: Response) 
 
   const data = await postLevelsSettings(guildId, req.body.data);
   if (data?.error) return res.status(400).send(data?.error);
+  if (!data?.guild || !data) return res.status(404).send({ msg: "Guild not found" });
 
   await createActionLog(guildId, req.user as User, "levels");
 

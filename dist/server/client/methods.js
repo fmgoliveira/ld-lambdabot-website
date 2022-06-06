@@ -2,22 +2,20 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkForBotPermissionManageRole = exports.checkForBotPermissionInCategory = exports.checkForBotPermissionInChannel = void 0;
 const _1 = require(".");
-const checkForBotPermissionInChannel = async (channelId, permission) => {
+const checkForBotPermissionInChannel = async (channelId, permission, guildId) => {
+    const member = _1.client.guilds.cache.get(guildId)?.me;
     const channel = await _1.client.channels.fetch(channelId);
-    if (!channel || !channel.isText())
+    if (!channel)
         return 0;
-    if (channel.type !== 'GUILD_TEXT' && channel.type !== 'GUILD_NEWS')
-        return 0;
-    return channel.permissionsFor(process.env.DISCORD_CLIENT_ID)?.has(permission) ? 2 : 1;
+    return member?.permissionsIn(channelId)?.has(permission) ? 2 : 1;
 };
 exports.checkForBotPermissionInChannel = checkForBotPermissionInChannel;
-const checkForBotPermissionInCategory = async (categoryId, permission) => {
+const checkForBotPermissionInCategory = async (categoryId, permission, guildId) => {
+    const member = _1.client.guilds.cache.get(guildId)?.me;
     const channel = await _1.client.channels.fetch(categoryId);
     if (!channel)
         return 0;
-    if (channel.type !== 'GUILD_CATEGORY')
-        return 0;
-    return channel.permissionsFor(process.env.DISCORD_CLIENT_ID)?.has(permission) ? 2 : 1;
+    return member?.permissionsIn(categoryId)?.has(permission) ? 2 : 1;
 };
 exports.checkForBotPermissionInCategory = checkForBotPermissionInCategory;
 const checkForBotPermissionManageRole = (roleId, guildId) => {

@@ -2,20 +2,20 @@ import { TextBasedChannel } from 'discord.js';
 import { PermissionString } from 'discord.js';
 import { client } from '.';
 
-export const checkForBotPermissionInChannel = async (channelId: string, permission: PermissionString) => {
+export const checkForBotPermissionInChannel = async (channelId: string, permission: PermissionString, guildId: string) => {
+  const member = client.guilds.cache.get(guildId)?.me;
   const channel = await client.channels.fetch(channelId);
-  if (!channel || !channel.isText()) return 0;
-  if (channel.type !== 'GUILD_TEXT' && channel.type !== 'GUILD_NEWS') return 0;
+  if (!channel) return 0;
 
-  return channel.permissionsFor(process.env.DISCORD_CLIENT_ID!)?.has(permission) ? 2 : 1;
+  return member?.permissionsIn(channelId)?.has(permission) ? 2 : 1;
 }
 
-export const checkForBotPermissionInCategory = async (categoryId: string, permission: PermissionString) => {
+export const checkForBotPermissionInCategory = async (categoryId: string, permission: PermissionString, guildId: string) => {
+  const member = client.guilds.cache.get(guildId)?.me;
   const channel = await client.channels.fetch(categoryId);
   if (!channel) return 0;
-  if (channel.type !== 'GUILD_CATEGORY') return 0;
 
-  return channel.permissionsFor(process.env.DISCORD_CLIENT_ID!)?.has(permission) ? 2 : 1;
+  return member?.permissionsIn(categoryId)?.has(permission) ? 2 : 1;
 }
 
 export const checkForBotPermissionManageRole = (roleId: string, guildId: string) => {

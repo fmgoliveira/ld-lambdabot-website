@@ -20,8 +20,6 @@ async function postAdministrationSettingsController(req, res) {
     const data = await (0, manage_1.postAdministrationSettings)(guildId, req.body.data);
     if (data?.error)
         return res.status(400).send(data?.error);
-    if (!data?.guild || !data)
-        return res.status(404).send({ msg: "Guild not found" });
     await (0, functions_1.createActionLog)(guildId, req.user, "administration");
     res.status(200).send(data);
 }
@@ -43,8 +41,6 @@ async function postWelcomeSettingsController(req, res) {
     const data = await (0, manage_1.postWelcomeSettings)(guildId, req.body.data);
     if (data?.error)
         return res.status(400).send(data?.error);
-    if (!data?.guild || !data)
-        return res.status(404).send({ msg: "Guild not found" });
     await (0, functions_1.createActionLog)(guildId, req.user, "welcome");
     res.status(200).send(data);
 }
@@ -56,8 +52,6 @@ async function postLeaveSettingsController(req, res) {
     const data = await (0, manage_1.postLeaveSettings)(guildId, req.body.data);
     if (data?.error)
         return res.status(400).send(data?.error);
-    if (!data?.guild || !data)
-        return res.status(404).send({ msg: "Guild not found" });
     await (0, functions_1.createActionLog)(guildId, req.user, "leave");
     res.status(200).send(data);
 }
@@ -69,8 +63,6 @@ async function postAutorolesSettingsController(req, res) {
     const data = await (0, manage_1.postAutorolesSettings)(guildId, req.body.data);
     if (data?.error)
         return res.status(400).send(data?.error);
-    if (!data?.guild || !data)
-        return res.status(404).send({ msg: "Guild not found" });
     await (0, functions_1.createActionLog)(guildId, req.user, "autoroles");
     res.status(200).send(data);
 }
@@ -92,8 +84,6 @@ async function postTicketsSettingsController(req, res) {
     const data = await (0, manage_1.postTicketsSettings)(guildId, req.body.data);
     if (data?.error)
         return res.status(400).send(data?.error);
-    if (!data?.guild || !data)
-        return res.status(404).send({ msg: "Guild not found" });
     await (0, functions_1.createActionLog)(guildId, req.user, "tickets");
     res.status(200).send(data);
 }
@@ -116,8 +106,6 @@ async function postModerationSettingsController(req, res) {
     const data = await (0, manage_1.postModerationSettings)(guildId, req.body.data);
     if (data?.error)
         return res.status(400).send(data?.error);
-    if (!data?.guild || !data)
-        return res.status(404).send({ msg: "Guild not found" });
     res.status(200).send(data);
 }
 exports.postModerationSettingsController = postModerationSettingsController;
@@ -128,8 +116,6 @@ async function postAltDetectionSettingsController(req, res) {
     const data = await (0, manage_1.postAltDetectionSettings)(guildId, req.body.data);
     if (data?.error)
         return res.status(400).send(data?.error);
-    if (!data?.guild || !data)
-        return res.status(404).send({ msg: "Guild not found" });
     res.status(200).send(data);
 }
 exports.postAltDetectionSettingsController = postAltDetectionSettingsController;
@@ -151,8 +137,6 @@ async function postLoggingSettingsController(req, res) {
     const data = await (0, manage_1.postLoggingSettings)(guildId, req.body.data);
     if (data?.error)
         return res.status(400).send(data?.error);
-    if (!data?.guild || !data)
-        return res.status(404).send({ msg: "Guild not found" });
     res.status(200).send(data);
 }
 exports.postLoggingSettingsController = postLoggingSettingsController;
@@ -163,8 +147,6 @@ async function postChatFilterSettingsController(req, res) {
     const data = await (0, manage_1.postChatFilterSettings)(guildId, req.body.data);
     if (data?.error)
         return res.status(400).send(data?.error);
-    if (!data?.guild || !data)
-        return res.status(404).send({ msg: "Guild not found" });
     res.status(200).send(data);
 }
 exports.postChatFilterSettingsController = postChatFilterSettingsController;
@@ -185,8 +167,6 @@ async function postVerificationSettingsController(req, res) {
     const data = await (0, manage_1.postVerificationSettings)(guildId, req.body.data);
     if (data?.error)
         return res.status(400).send(data?.error);
-    if (!data?.guild || !data)
-        return res.status(404).send({ msg: "Guild not found" });
     await (0, functions_1.createActionLog)(guildId, req.user, "verification");
     res.status(200).send(data);
 }
@@ -208,8 +188,6 @@ async function postLevelsSettingsController(req, res) {
     const data = await (0, manage_1.postLevelsSettings)(guildId, req.body.data);
     if (data?.error)
         return res.status(400).send(data?.error);
-    if (!data?.guild || !data)
-        return res.status(404).send({ msg: "Guild not found" });
     await (0, functions_1.createActionLog)(guildId, req.user, "levels");
     res.status(200).send(data);
 }

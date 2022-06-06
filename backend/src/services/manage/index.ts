@@ -50,7 +50,7 @@ export async function postAdministrationSettings(guildId: string | undefined, da
 
   if (data.settings.chatbot.enabled) {
     const errorArray = data.settings.chatbot.channels.map(async (channelId) => {
-      const chatbotPerms = await checkForBotPermissionInChannel(channelId, "SEND_MESSAGES");
+      const chatbotPerms = await checkForBotPermissionInChannel(channelId, "SEND_MESSAGES", guildId!);
       if (chatbotPerms === 1) return true;
       else if (chatbotPerms === 2) return false;
     });
@@ -58,7 +58,7 @@ export async function postAdministrationSettings(guildId: string | undefined, da
   };
 
   data.settings.autoreact.forEach(async (autoreactObj) => {
-    const chatbotPerms = await checkForBotPermissionInChannel(autoreactObj.channel, "ADD_REACTIONS");
+    const chatbotPerms = await checkForBotPermissionInChannel(autoreactObj.channel, "ADD_REACTIONS", guildId!);
     if (chatbotPerms === 1) return { error: "I don't have permission to react to messages in at least one of the autoreact's specified channels." };
   });
 
@@ -125,7 +125,7 @@ export async function postWelcomeSettings(guildId: string | undefined, data: {
   if (!data.settings.message && !data.settings.embed.enabled) return { error: "You must specify a message or an embed." };
 
   if (data.settings.enabled) {
-    const botHasPermissions: 0 | 1 | 2 = await checkForBotPermissionInChannel(data.settings.channel, "SEND_MESSAGES");
+    const botHasPermissions: 0 | 1 | 2 = await checkForBotPermissionInChannel(data.settings.channel, "SEND_MESSAGES", guildId!);
     if (botHasPermissions === 0) return { error: "The channel you specified is not valid." };
     if (botHasPermissions === 1) return { error: "The bot does not have permission to send messages in the channel you specified." };
   };
@@ -172,7 +172,7 @@ export async function postLeaveSettings(guildId: string | undefined, data: {
   if (!data.settings.message && !data.settings.embed.enabled) return { error: "You must specify a message or an embed." };
 
   if (data.settings.enabled) {
-    const botHasPermissions: 0 | 1 | 2 = await checkForBotPermissionInChannel(data.settings.channel, "SEND_MESSAGES");
+    const botHasPermissions: 0 | 1 | 2 = await checkForBotPermissionInChannel(data.settings.channel, "SEND_MESSAGES", guildId!);
     if (botHasPermissions === 0) return { error: "The channel you specified is not valid." };
     if (botHasPermissions === 1) return { error: "The bot does not have permission to send messages in the channel you specified." };
   };
@@ -323,16 +323,16 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
 
   if (data.settings.enabled) {
     if (data.settings.logChannel) {
-      const botHasPermissionsInLogChannel: 0 | 1 | 2 = await checkForBotPermissionInChannel(data.settings.logChannel, "SEND_MESSAGES");
+      const botHasPermissionsInLogChannel: 0 | 1 | 2 = await checkForBotPermissionInChannel(data.settings.logChannel, "SEND_MESSAGES", guildId!);
       if (botHasPermissionsInLogChannel === 0) return { error: "The log channel you specified is not valid." };
       if (botHasPermissionsInLogChannel === 1) return { error: "The bot does not have permission to send messages in the log channel you specified." };
     };
     if (data.settings.closedCategory) {
-      const botHasPermissionsInClosedCategory: 0 | 1 | 2 = await checkForBotPermissionInCategory(data.settings.closedCategory, "MANAGE_CHANNELS");
+      const botHasPermissionsInClosedCategory: 0 | 1 | 2 = await checkForBotPermissionInCategory(data.settings.closedCategory, "MANAGE_CHANNELS", guildId!);
       if (botHasPermissionsInClosedCategory === 0) return { error: "The closed category you specified is not valid." };
       if (botHasPermissionsInClosedCategory === 1) return { error: "The bot does not have permission to manage channels in the closed category you specified." };
     };
-    const botHasPermissionsInPanelMessageChannel: 0 | 1 | 2 = await checkForBotPermissionInChannel(data.settings.panelMessage.channel, "SEND_MESSAGES");
+    const botHasPermissionsInPanelMessageChannel: 0 | 1 | 2 = await checkForBotPermissionInChannel(data.settings.panelMessage.channel, "SEND_MESSAGES", guildId!);
     if (botHasPermissionsInPanelMessageChannel === 0) return { error: "The panel message channel you specified is not valid." };
     if (botHasPermissionsInPanelMessageChannel === 1) return { error: "The bot does not have permission to send messages in the panel message channel you specified." };
 
@@ -356,7 +356,7 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
 
     if (data.settings.categories !== prevTicketCategories) {
       data.settings.categories.forEach(async (category) => {
-        const botHasPermissionsInCategoryChannel: 0 | 1 | 2 = await checkForBotPermissionInCategory(category.categoryChannel, "MANAGE_CHANNELS");
+        const botHasPermissionsInCategoryChannel: 0 | 1 | 2 = await checkForBotPermissionInCategory(category.categoryChannel, "MANAGE_CHANNELS", guildId!);
         if (botHasPermissionsInCategoryChannel === 0) return { error: "The category channel you specified is not valid." };
         if (botHasPermissionsInCategoryChannel === 1) return { error: "The bot does not have permission to manage channels in the category channel you specified." };
 
@@ -451,33 +451,33 @@ export async function postTicketsSettings(guildId: string | undefined, data: {
         };
       } else return { error: "The panel message channel you specified is not valid." };
     }
-
-    guild.modules.tickets = data.settings as {
-      enabled: boolean;
-      panelMessage: {
-        id: string;
-        url: string;
-        message: {
-          title: string;
-          description: string;
-          color: string;
-          thumbnail: string;
-          titleUrl: string;
-          image: string;
-          timestamp: boolean;
-        };
-        channel: string;
-      };
-      logChannel: string;
-      closedCategory: string;
-      ticketCount: number;
-    };
-    guild.commands.tickets = data.commands;
-
-    await guild.save();
-
-    return { guild, error: null };
   };
+
+  guild.modules.tickets = data.settings as {
+    enabled: boolean;
+    panelMessage: {
+      id: string;
+      url: string;
+      message: {
+        title: string;
+        description: string;
+        color: string;
+        thumbnail: string;
+        titleUrl: string;
+        image: string;
+        timestamp: boolean;
+      };
+      channel: string;
+    };
+    logChannel: string;
+    closedCategory: string;
+    ticketCount: number;
+  };
+  guild.commands.tickets = data.commands;
+
+  await guild.save();
+
+  return { guild, error: null };
 };
 
 export async function getModerationSettings(guildId: string | undefined) {
@@ -544,7 +544,7 @@ export async function postAltDetectionSettings(guildId: string | undefined, data
   if (!guild) return null;
 
   if (data.settings.enabled) {
-    const botHasPermissions = await checkForBotPermissionInChannel(data.settings.logChannel, "SEND_MESSAGES");
+    const botHasPermissions = await checkForBotPermissionInChannel(data.settings.logChannel, "SEND_MESSAGES", guildId!);
     if (botHasPermissions === 0) return { error: "The log channel you specified is not valid." };
     if (botHasPermissions === 1) return { error: "The bot does not have permission to send messages in the log channel you specified." };
   };
@@ -570,7 +570,7 @@ export async function postChatFilterSettings(guildId: string | undefined, data: 
   if (!guild) return null;
 
   if (data.settings.enabled) {
-    const botHasPermissions = await checkForBotPermissionInChannel(data.settings.logChannel, "SEND_MESSAGES");
+    const botHasPermissions = await checkForBotPermissionInChannel(data.settings.logChannel, "SEND_MESSAGES", guildId!);
     if (botHasPermissions === 0) return { error: "The log channel you specified is not valid." };
     if (botHasPermissions === 1) return { error: "The bot does not have permission to send messages in the log channel you specified." };
   };
@@ -650,25 +650,25 @@ export async function postLoggingSettings(guildId: string | undefined, data: {
 
   if (data.settings.enabled) {
     if (data.settings.moderation.enabled && data.settings.moderation.channel) {
-      const botHasPermissionsInModerationLogChannel = await checkForBotPermissionInChannel(data.settings.moderation.channel, "SEND_MESSAGES");
+      const botHasPermissionsInModerationLogChannel = await checkForBotPermissionInChannel(data.settings.moderation.channel, "SEND_MESSAGES", guildId!);
       if (botHasPermissionsInModerationLogChannel === 0) return { error: "The log channel you specified for moderation logging is not valid." };
       if (botHasPermissionsInModerationLogChannel === 1) return { error: "The bot does not have permission to send messages in the log channel you specified for moderation logging." };
     };
 
     if (data.settings.serverEvents.enabled && data.settings.serverEvents.channel) {
-      const botHasPermissionsInServerEventsLogChannel = await checkForBotPermissionInChannel(data.settings.serverEvents.channel, "SEND_MESSAGES");
+      const botHasPermissionsInServerEventsLogChannel = await checkForBotPermissionInChannel(data.settings.serverEvents.channel, "SEND_MESSAGES", guildId!);
       if (botHasPermissionsInServerEventsLogChannel === 0) return { error: "The log channel you specified for server events logging is not valid." };
       if (botHasPermissionsInServerEventsLogChannel === 1) return { error: "The bot does not have permission to send messages in the log channel you specified for server events logging." };
     };
 
     if (data.settings.memberEvents.enabled && data.settings.memberEvents.channel) {
-      const botHasPermissionsInMemberEventsLogChannel = await checkForBotPermissionInChannel(data.settings.memberEvents.channel, "SEND_MESSAGES");
+      const botHasPermissionsInMemberEventsLogChannel = await checkForBotPermissionInChannel(data.settings.memberEvents.channel, "SEND_MESSAGES", guildId!);
       if (botHasPermissionsInMemberEventsLogChannel === 0) return { error: "The log channel you specified for member events logging is not valid." };
       if (botHasPermissionsInMemberEventsLogChannel === 1) return { error: "The bot does not have permission to send messages in the log channel you specified for member events logging." };
     };
 
     if (data.settings.messageEvents.enabled && data.settings.messageEvents.channel) {
-      const botHasPermissionsInMessageEventsLogChannel = await checkForBotPermissionInChannel(data.settings.messageEvents.channel, "SEND_MESSAGES");
+      const botHasPermissionsInMessageEventsLogChannel = await checkForBotPermissionInChannel(data.settings.messageEvents.channel, "SEND_MESSAGES", guildId!);
       if (botHasPermissionsInMessageEventsLogChannel === 0) return { error: "The log channel you specified for message events logging is not valid." };
       if (botHasPermissionsInMessageEventsLogChannel === 1) return { error: "The bot does not have permission to send messages in the log channel you specified for message events logging." };
     };
@@ -735,7 +735,7 @@ export async function postVerificationSettings(guildId: string | undefined, data
     if (data.settings.enabled && !data.settings.buttonLabel) return { error: "You must specify a button label." };
     if (data.settings.enabled && data.settings.buttonLabel.length > 80) return { error: "The button label must be 80 characters or less." };
 
-    const botHasPermissions: 0 | 1 | 2 = await checkForBotPermissionInChannel(data.settings.channel, "SEND_MESSAGES");
+    const botHasPermissions: 0 | 1 | 2 = await checkForBotPermissionInChannel(data.settings.channel, "SEND_MESSAGES", guildId!);
     if (botHasPermissions === 0) return { error: "The channel you specified is not valid." };
     if (botHasPermissions === 1) return { error: "The bot does not have permission to send messages in the channel you specified." };
 
@@ -838,7 +838,7 @@ export async function postLevelsSettings(guildId: string | undefined, data: {
   };
 
   if (data.settings.enabled && !['disabled', 'current', 'dm'].includes(data.settings.channel)) {
-    const botHasPermissions: 0 | 1 | 2 = await checkForBotPermissionInChannel(data.settings.channel, "SEND_MESSAGES");
+    const botHasPermissions: 0 | 1 | 2 = await checkForBotPermissionInChannel(data.settings.channel, "SEND_MESSAGES", guildId!);
     if (botHasPermissions === 0) return { error: "The channel you specified is not valid." };
     if (botHasPermissions === 1) return { error: "The bot does not have permission to send messages in the channel you specified." };
   };

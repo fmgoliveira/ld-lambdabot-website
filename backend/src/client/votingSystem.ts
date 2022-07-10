@@ -181,7 +181,7 @@ export default async (client: Client) => {
       embeds.push(lastEmbed);
     };
 
-    webhook?.editMessage("977976966491820072", {
+    webhook?.editMessage("995645589700218890", {
       content: null,
       embeds,
     });

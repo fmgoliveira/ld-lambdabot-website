@@ -94,43 +94,43 @@ export const ManageModerationPage = ({ user }: { user: User }) => {
         break
 
       case 'banCommand':
-        data.moderation.commands.ban = value
-        setBanCommand(value)
+        data.moderation.commands.ban = checked
+        setBanCommand(checked)
         postModuleSettings(guildId, 'moderation', data.moderation, Store)
         break
       case 'kickCommand':
-        data.moderation.commands.kick = value
-        setKickCommand(value)
+        data.moderation.commands.kick = checked
+        setKickCommand(checked)
         postModuleSettings(guildId, 'moderation', data.moderation, Store)
         break
       case 'warnCommand':
-        data.moderation.commands.warn = value
-        setWarnCommand(value)
+        data.moderation.commands.warn = checked
+        setWarnCommand(checked)
         postModuleSettings(guildId, 'moderation', data.moderation, Store)
         break
       case 'timeoutCommand':
-        data.moderation.commands.timeout = value
-        setTimeoutCommand(value)
+        data.moderation.commands.timeout = checked
+        setTimeoutCommand(checked)
         postModuleSettings(guildId, 'moderation', data.moderation, Store)
         break
       case 'slowmodeCommand':
-        data.moderation.commands.slowmode = value
-        setSlowmodeCommand(value)
+        data.moderation.commands.slowmode = checked
+        setSlowmodeCommand(checked)
         postModuleSettings(guildId, 'moderation', data.moderation, Store)
         break
       case 'warningsCommand':
-        data.moderation.commands.warnings = value
-        setWarningsCommand(value)
+        data.moderation.commands.warnings = checked
+        setWarningsCommand(checked)
         postModuleSettings(guildId, 'moderation', data.moderation, Store)
         break
       case 'clearwarnsCommand':
-        data.moderation.commands.clearwarns = value
-        setClearwarnsCommand(value)
+        data.moderation.commands.clearwarns = checked
+        setClearwarnsCommand(checked)
         postModuleSettings(guildId, 'moderation', data.moderation, Store)
         break
       case 'clearCommand':
-        data.moderation.commands.clear = value
-        setClearCommand(value)
+        data.moderation.commands.clear = checked
+        setClearCommand(checked)
         postModuleSettings(guildId, 'moderation', data.moderation, Store)
         break
 
